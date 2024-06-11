@@ -1,0 +1,10 @@
+#python 
+.pylintrc
+__pycache__/
+
+#ide
+.vscode/
+
+#django 
+db.sqlite3
+media/
