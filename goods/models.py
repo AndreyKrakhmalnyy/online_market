@@ -52,7 +52,7 @@ class Products(models.Model):
     descripion = models.TextField(blank=True, null=True, verbose_name='Описание')
     image = models.ImageField(upload_to='goods_images', blank=True, null=True, verbose_name='Изображение')
     price = models.DecimalField(default=0, max_digits=7, decimal_places=0, verbose_name='Стоимость в рублях')
-    discount = models.DecimalField(default=0, max_digits=3, decimal_places=0, verbose_name='Скидка в %')
+    discount = models.DecimalField(blank=True, null=True, default=0, max_digits=3, decimal_places=0, verbose_name='Скидка в %')
     quantity = models.PositiveIntegerField(default=0, verbose_name='Количество')
     category = models.ForeignKey(to=Categories, on_delete=models.CASCADE, verbose_name='Категория')
 
@@ -70,3 +70,14 @@ class Products(models.Model):
         
     def __str__(self) -> str:
         return f'{self.name}, количество - {self.quantity} шт.'
+    
+    def display_id(self):
+        return f'Артикул товара - {self.id:005}'
+
+    def display_quantity(self):
+        return f'Штук в наличии - {self.quantity}' 
+    
+    def discount_calculation(self):
+        if self.discount:
+            return round(self.price * (100 - self.discount)/100)
+        return self.price

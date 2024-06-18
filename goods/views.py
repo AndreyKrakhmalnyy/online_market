@@ -1,6 +1,5 @@
 from django.shortcuts import render
-from .goods_list import goods
-from typing import Dict, List
+from goods.models import Products
 
 
 def product(request):
@@ -15,5 +14,7 @@ def catalog(request):
         title - заголовок шаблона;
         goods - информация о товаре, передаваемая из файла 'goods_list.py' в текущей директории.
     """
-    context: Dict[str, List[str, float]] = {"title": "Home - Каталог", "goods": goods}
+    goods = Products.objects.all()
+
+    context = {"title": "Home - Каталог", "goods": goods}
     return render(request, "goods/catalog.html", context)
