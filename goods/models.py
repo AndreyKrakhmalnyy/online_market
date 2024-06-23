@@ -26,6 +26,7 @@ class Categories(models.Model):
         db_table = "category"
         verbose_name = "категорию"
         verbose_name_plural = "Категории"
+        
 
     def __str__(self):
         return self.name
@@ -81,6 +82,7 @@ class Products(models.Model):
         db_table = "product"
         verbose_name = "продукт"
         verbose_name_plural = "Продукты"
+        ordering = ("id",)
 
     def __str__(self) -> str:
         """Метод для удобочитаемого отображения имени товара в админке."""
