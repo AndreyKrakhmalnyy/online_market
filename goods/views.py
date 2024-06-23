@@ -14,14 +14,16 @@ def product(request, product_slug):
     return render(request, "goods/product.html", context=context)
 
 
-def catalog(request):
+def catalog(request, category_slug):
     """Функция отображает шаблон 'catalog.html' приложения 'goods' и возвращает информацию о товарах через переменную 'context'.
 
     Параметры переменной 'context':
         title - заголовок шаблона;
         goods - информация о всех товарах из БД.
     """
-
-    goods = Products.objects.all()
+    if category_slug == 'all':
+        goods = Products.objects.all()
+    else:
+        goods = Products.objects.filter(category__slug=category_slug)
     context = {"title": "Home - Каталог", "goods": goods}
     return render(request, "goods/catalog.html", context)
