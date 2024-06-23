@@ -26,9 +26,10 @@ class Categories(models.Model):
         db_table = "category"
         verbose_name = "категорию"
         verbose_name_plural = "Категории"
-        
+
     def __str__(self):
         return self.name
+
 
 class Products(models.Model):
     """
@@ -49,12 +50,25 @@ class Products(models.Model):
     slug = models.CharField(
         max_length=200, unique=True, blank=True, null=True, verbose_name="URL"
     )
-    descripion = models.TextField(blank=True, null=True, verbose_name='Описание')
-    image = models.ImageField(upload_to='goods_images', blank=True, null=True, verbose_name='Изображение')
-    price = models.DecimalField(default=0, max_digits=7, decimal_places=0, verbose_name='Стоимость в рублях')
-    discount = models.DecimalField(blank=True, null=True, default=0, max_digits=3, decimal_places=0, verbose_name='Скидка в %')
-    quantity = models.PositiveIntegerField(default=0, verbose_name='Количество')
-    category = models.ForeignKey(to=Categories, on_delete=models.CASCADE, verbose_name='Категория')
+    descripion = models.TextField(blank=True, null=True, verbose_name="Описание")
+    image = models.ImageField(
+        upload_to="goods_images", blank=True, null=True, verbose_name="Изображение"
+    )
+    price = models.DecimalField(
+        default=0, max_digits=7, decimal_places=0, verbose_name="Стоимость в рублях"
+    )
+    discount = models.DecimalField(
+        blank=True,
+        null=True,
+        default=0,
+        max_digits=3,
+        decimal_places=0,
+        verbose_name="Скидка в %",
+    )
+    quantity = models.PositiveIntegerField(default=0, verbose_name="Количество")
+    category = models.ForeignKey(
+        to=Categories, on_delete=models.CASCADE, verbose_name="Категория"
+    )
 
     class Meta:
         """Класс для отображения названий таблицы в БД и названия модели на русском языке.
@@ -67,17 +81,21 @@ class Products(models.Model):
         db_table = "product"
         verbose_name = "продукт"
         verbose_name_plural = "Продукты"
-        
+
     def __str__(self) -> str:
-        return f'{self.name}, количество - {self.quantity} шт.'
-    
+        """Метод для удобочитаемого отображения имени товара в админке."""
+        return f"{self.name}, количество - {self.quantity} шт."
+
     def display_id(self):
-        return f'Артикул товара - {self.id:005}'
+        """Метод, отображающий артикул товара на его карточке."""
+        return f"Артикул товара - {self.id:005}"
 
     def display_quantity(self):
-        return f'Штук в наличии - {self.quantity}' 
-    
+        """Метод, отображающий количество товара на его карточке."""
+        return f"Штук в наличии - {self.quantity}"
+
     def discount_calculation(self):
+        """Метод для корректного отображения стоимости товара со скидкой и без неё."""
         if self.discount:
-            return round(self.price * (100 - self.discount)/100)
+            return round(self.price * (100 - self.discount) / 100)
         return self.price
