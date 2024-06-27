@@ -1,6 +1,6 @@
 {% extends "main/base.html" %}
 {% load static %}
-{% load goods_tags %}
+{% load goods_tags %} 
 
 {% block content %}
 <div class="row">
@@ -10,17 +10,27 @@
             aria-expanded="false">
             Фильтры
         </button>
-
-        <form action="{% url "catalog:index" slug_url %}" method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
+        <!--Условие if проверяет словарь GET-запроса на наличие параметра q и если он есть, то вернуть страницу по url-маршруту catalog:search.-->
+        <!--А если условие выше не выполняется, то происходит перенаправление на url (catalog:index), которое передаёт значение slug_url из контроллера views.py в url-строку - для удобочитаемости.-->
+        <form action="{% if request.GET.q %}{% url "catalog:search" %}{% else %}{% url "catalog:index" slug_url %}{% endif %}" method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
             <div class="form-check text-white mx-3">
+                <!--Условие if принимает переменную on_sale из контроллера, которая извлекает значение по ключу 'on_sale' (значение передаётся в переменную name в этом тэге),
+                        и применяет к нему методы request.GET, которые предоставляет информацию о HTTP-запросе (значения, переданные в URL-адресе через GET-параметры)
+                        в виде словаря и сверяет со значением переменной value (перед условием) равным 'on', то будет установлена пометка (checked) в ячейке.-->
                 <input class="form-check-input" type="checkbox" name="on_sale" id="flexCheckDefault" value="on" {% if request.GET.on_sale == "on" %} checked {% endif %}>
-                {% comment %} <input type="hidden" name="q" value="request.GET.q"> {% endcomment %}
+                {% if request.GET.q %}
+                    <input type="hidden" name="q" value="{{ request.GET.q }}">
+                {% endif %}
                 <label class="form-check-label" for="flexCheckDefault">
                     Товары по акции
                 </label>
             </div>
             <p class="text-white mx-3 mt-3">Сортировать:</p>
             <div class="form-check text-white mx-3">
+                <!--Условие if принимает переменную order_by из контроллера, которая либо извлекает значение по ключу 'order_by' (значение передаётся в переменную name)
+                        и применяет к нему методы request.GET, которые предоставляет информацию о HTTP-запросе (значения, переданные в URL-адресе через GET-параметры)
+                        в виде словаря и проверяет на 2 условия - если порядок сортировки не установлен (то есть если параметра order_by нет) или он дефолтный (равен value),
+                        то будет установлена пометка (checked) в ячейке.-->
                 <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault1" value="default" 
                 {% if not request.GET.order_by or request.GET.order_by == "default" %} checked {% endif %}>
                 <label class="form-check-label" for="flexRadioDefault1">
@@ -89,25 +99,30 @@
               <a class="page-link" href="{% if goods.has_previous %}?{% change_parameters page=goods.previous_page_number %}{% else %}#{% endif %}">Предыдущая</a>
             </li>
 
+            <!--Цикл, в котором к переменной paginator, которая разбивает список товаров на части и отображает указанное количество, применяется метод
+                page_range, который возвращает список номеров страниц, доступных для навигации по результатам пагинации.-->
             {% for page in goods.paginator.page_range %}
-                <!--Тэг (условие if) отвечает за отображение трёх номеров страниц при пагинации-->
+                <!--Это условие в шаблоне проверяет, находится ли текущий номер страницы (page) в пределах 2 страниц от текущей страницы в наборе данных (goods.number).--> 
                 {% if page >= goods.number|add:-2 and page <= goods.number|add:2 %}
+                    <!--Если условие if выше выполняется, то проверяется условие ниже, в котором если текущий номер страницы (`page`) совпадает с номером текущей страницы
+                        в наборе данных (`goods.number`), то добавляет класс `active`, который помечает кнопку цветом, если мы на ней находимся.-->
                     <li class="page-item {% if goods.number == page %} active {% endif %}">
-                        <!--Передаётся тэг change_parameters из templatetags/goods_tags и обновляет контекст пагинации--> 
+                        <!--Передаётся тэг change_parameters (page из цикла for=page из views.py) из templatetags/goods_tags и обновляет контекст пагинации.--> 
                         <a class="page-link" href="?{% change_parameters page=page %}">{{ page }}</a>
                     </li>
                 {% endif %}
             {% endfor %}
-
+            <!--Используем метод класса Paginator, определённый в views.py, который отключает кнопку перехода на следующую страницу, если мы находимся на последней странице. -->
             <li class="page-item {% if not goods.has_next %} disabled {% endif %}">
+                <!--Также используем метод класса Paginator, в котором если у нас есть следующая страница, то change_parameters принимает и устанавливает новую страницу, и не устанавливает ничего в любом другом случае. -->
                 <a class="page-link" href="{% if goods.has_next %}?{% change_parameters page=goods.next_page_number %}{% else %}#{% endif %}">Следующая</a>
               </li>
             </li>
         </div>
     </ul>
 </nav>
-
 {% endblock %}
+
 <!-- Футер -->
 {% block footer %}
     <footer class="py-4 bg-dark">
