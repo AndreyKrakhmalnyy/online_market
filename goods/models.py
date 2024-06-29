@@ -51,7 +51,7 @@ class Products(models.Model):
     slug = models.CharField(
         max_length=200, unique=True, blank=True, null=True, verbose_name="URL"
     )
-    descripion = models.TextField(blank=True, null=True, verbose_name="Описание")
+    description = models.TextField(blank=True, null=True, verbose_name="Описание")
     image = models.ImageField(
         upload_to="goods_images", blank=True, null=True, verbose_name="Изображение"
     )

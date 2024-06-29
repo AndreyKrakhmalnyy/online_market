@@ -1,8 +1,9 @@
-from django.db.models import Q, BaseManager
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.db.models import QuerySet
 from goods.models import Products
 
 
-def q_search(query: str) -> BaseManager[Products]:
+def q_search(query: str) -> QuerySet[Products]:
     """Метод для поиска товара по его id.
 
     Args:
@@ -10,44 +11,29 @@ def q_search(query: str) -> BaseManager[Products]:
 
     Returns:
         QuerySet - набор объектов Products, соответствующих заданному id,
-            либо пустой QuerySet, если id не найден.
+            либо пустой QuerySet, если id не найден, иначе искать по полям name и description с учётом регистра, окончаний и т.д.
     """
     if query.isdigit() and len(query) <= 5:
         return Products.objects.filter(id=int(query))
-
-    keywords: list[str] = [word for word in query.split() if len(query) > 2]
-    q_objects = Q()
     
-    for token in keywords:
-        q_objects |= Q(description__icontains=token)
-        
-    return Products.objects.filter(q_objects)
+    vector = SearchVector("name", "description")
+    query = SearchQuery(query)
 
-# def q_search_id(query: str):
-#     """Метод для поиска товара по его id.
+    return Products.objects.annotate(rank=SearchRank(vector, query)).order_by("-rank")
 
-#     Args:
-#         query (str): Строка, содержащая id товара.
 
-#     Returns:
-#         QuerySet: Набор объектов Products, соответствующих заданному id,
-#         либо пустой QuerySet, если id не найден.
 
-#     Raises:
-#         ValueError: Если query-строка не содержит только целые числа или её длина больше 5 символов.
-#     """
-#     if query.isdigit() and len(query) <= 5:
-#         return Products.objects.filter(id=int(query))
-#     raise ValueError("The Query string must contain only integers and contain up to 5 inclusive.")
 
-# def q_search_substring(query: str):
-#     keywords = [word for word in query.split() if len(query) > 2]
-#     q_objects = Q()
+# Кастомный моиск с учётом регистра, но без учёта падежей, окончаний.
+    # <return Products.objects.filter(id=int(query))>
+    # keywords: list[str] = [word for word in query.split() if len(query) > 2] # list-генератор, который разбивает поисковой запрос по пробелам при условии количества слов больше 2
+    # q_objects = Q() # Q() - для сложных логических запросов к БД, который позволяет комбинировать различные условия AND, OR и NOT
     
-#     for token in keywords:
-#         q_objects |= Q(description__icontains=token)
+    # for token in keywords: # цикл, который перебирает слова списка
+    #     q_objects |= Q(description__icontains=token) # проверяет наличие слова (in description) по условию или (|), то есть обращается к столбцу description и ищет все возможные совпадения по словам 
+    #     q_objects |= Q(name__icontains=token) # проверка по названию товара (in name)
         
-#     return Products.objects.filter(q_objects)
+    # return Products.objects.filter(q_objects) # возвращает карточки с совпадающим описанием или именем
 
 
 
