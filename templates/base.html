@@ -176,6 +176,10 @@
                     <!-- Пустой блок на Ваше усмотрение -->
                 </div>
                 <div class="col-lg-10">
+                    
+                    <!-- Подгрузка разметки для отображения ошибок при вводе данных формы авторизации -->
+                    {% include "includes/notifications.html" %}
+
                     {% block content %}{% endblock %}
                 </div>
             </div>
