@@ -1,10 +1,8 @@
 from django.contrib import auth
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
-
-from users.forms import UserLoginForm
-
+from users.forms import UserLoginForm, UserRegistrationForm
 
 
 def login(request):
@@ -15,37 +13,49 @@ def login(request):
             username = request.POST["username"]
             password = request.POST["password"]
             user = auth.authenticate(username=username, password=password)
-            
+
             if user:
                 auth.login(request, user)
-            return HttpResponseRedirect(reverse("main:index"))
-   
+                return HttpResponseRedirect(reverse("main:index"))
+
     else:
         form = UserLoginForm()
-             
+
     context = {
-        'login': 'Home - Авторизацмя',
-        'form': form
+        "login": "Home - Авторизацмя", 
+        "form": form
     }
-    return render(request, 'users/login.html', context)
+    return render(request, "users/login.html", context)
+
 
 def registration(request):
+    if request.method == "POST":
+        form = UserRegistrationForm(data=request.POST)
+
+        if form.is_valid():
+            form.save()
+            user = form.instance
+            auth.login(request, user)
+            return HttpResponseRedirect(reverse("main:index"))
+
+    else:
+        form = UserRegistrationForm()
 
     context = {
-        'registration': 'Home - Регистрация',
+        "registration": "Home - Регистрация",
+        "form": form,
     }
-    return render(request, 'users/registration.html', context)
+    return render(request, "users/registration.html", context)
+
 
 def profile(request):
-    
+
     context = {
-        'profile': 'Home - Личный кабинет',
+        "profile": "Home - Личный кабинет",
     }
-    return render(request, 'users/profile.html', context)
+    return render(request, "users/profile.html", context)
+
 
 def logout(request):
-    pass    
-    # context = {
-    #     'profile': 'Home - Личный кабинет',
-    # }
-    # return render(request, 'users/profile.html', context)
+    auth.logout(request)
+    return redirect(reverse("main:index"))
