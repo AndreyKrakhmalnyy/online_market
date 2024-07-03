@@ -58,7 +58,9 @@ def profile(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Ваши данные обновлены")
-            return HttpResponseRedirect(reverse("user:profile"))
+            
+            if request.POST.get("next", None):
+                return HttpResponseRedirect(request.POST.get("next"))
 
     else:
         form = ProfileForm(instance=request.user)

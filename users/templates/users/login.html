@@ -9,6 +9,11 @@
                     <h2 class="text-center mb-4">Авторизация</h2>
                     <form action={% url "user:login" %} method="post">
                         {% csrf_token %}
+                        <!--Условие if для переадресации анонимного пользователя на страницу авторизации, в котором мы направляем
+                            его по URL, указанному в ключе next GET-запроса-->
+                        {% if request.GET.next %}
+                            <input type="hidden" name="text" value={{ request.GET.next }}>
+                        {% endif %}
                         <!--Добавляем переменную action и передаём в тэг url (name из корневой urls.py:namespace из urls.py сервиса), method (post) и шифрование
                         {% csrf_token %} - отвечает за генерацию токена при отправке логина и пароля-->
                         <div class="mb-3">
