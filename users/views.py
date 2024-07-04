@@ -24,7 +24,7 @@ def login(request):
         form = UserLoginForm()
 
     context = {
-        "login": "Home - Авторизацмя", 
+        "login": "Авторизация", 
         "form": form
     }
     return render(request, "users/login.html", context)
@@ -77,3 +77,6 @@ def logout(request):
     messages.success(request, f"{request.user.username}, Вы вышли из аккаунта")
     auth.logout(request)
     return redirect(reverse("main:index"))
+
+def users_cart(request):
+    return render(request, "users/users_cart.html")
