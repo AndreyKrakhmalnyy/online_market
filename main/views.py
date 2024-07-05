@@ -1,18 +1,25 @@
+from typing import Any
 from django.shortcuts import render
 from goods.models import Categories
 
 
 def index(request):
-    """Функция отображает шаблон 'catalog.html' приложения 'main' и возвращает информацию о товарах через переменную 'context'.
+    """Отображает шаблон и возвращает информацию о товарах.
 
-    Параметры переменной 'context':
-        title - заголовок вкладки;
-        goods - заголовок страницы.
+    Args:
+        request: Запрос пользователя.
+
+     Attributes:
+        categories: QuerySet со всеми категориями товаров.
+        context: Словарь, содержащий данные для шаблона 'main/index.html'.
+
+    Returns:
+        HttpResponse: Ответ, отображающий шаблон 'main/index.html' с контекстом, содержащим информацию о категориях.
     """
     
     categories = Categories.objects.all()
     
-    context = {
+    context: dict[str, Any]  = {
         'title': 'Home - Главная',
         'content': 'Магазин мебели HOME',
         'categories': categories
@@ -20,13 +27,14 @@ def index(request):
     return render(request, 'main/index.html', context)
 
 def about(request):
-    """Функция отображает шаблон 'catalog.html' приложения 'main' и возвращает информацию о товарах через переменную 'context'.
+    """Отображает шаблон и возвращает информацию о странице.
 
-    Параметры переменной 'context':
-        title - заголовок вкладки;
-        goods - заголовок страницы.
+    Args:
+        request: Запрос пользователя.
+
+    Returns:
+        HttpResponse: Ответ, отображающий шаблон 'main/about.html' с контекстом, содержащим заголовок и контент страницы.
     """
-    
     context = {
         'title': 'Общая информация',
         'content': 'О нас',
