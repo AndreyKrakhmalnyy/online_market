@@ -33,7 +33,7 @@ def cart_add(request, product_slug: str):
     return redirect(request.META["HTTP_REFERER"])    
 
 def cart_change(request, product_slug):
- 
+    pass
 
 def cart_remove(request, cart_id: int):
     """Удаляет товар по его id модели 'Cart' из корзины авторизованного пользователя и направляет его предыдущую страницу.
