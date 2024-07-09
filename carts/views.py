@@ -22,7 +22,6 @@ def cart_add(request):
     """
 
     product_id = request.POST.get("product_id")
-
     product = Products.objects.get(id=product_id)
     
     if request.user.is_authenticated:
@@ -48,15 +47,12 @@ def cart_add(request):
 
     return JsonResponse(response_data)
 
-def cart_change(request, product_slug):
-    pass
-
-def cart_remove(request, cart_id: int):
-    """Удаляет товар по его id модели 'Cart' из корзины авторизованного пользователя и направляет его предыдущую страницу.
+def cart_remove(request):
+    """Удаляет товар по id корзины модели 'Cart' авторизованного пользователя.
 
     Args:
         request: Запрос пользователя.
-        cart_id: id товара.
+        cart_id: id конкретной корзины.
 
     Attributes:
         cart: Запрашиваемый объект из БД по его id.
@@ -64,7 +60,22 @@ def cart_remove(request, cart_id: int):
     Returns:
         HttpResponseRedirect: Перенаправление пользователя на предыдущую страницу.
     """
-
+    cart_id = request.POST.get("cart_id")
     cart = Cart.objects.get(id=cart_id)
+    quantity = cart.quantity
     cart.delete()
-    return redirect(request.META["HTTP_REFERER"])
+    
+    user_cart = get_user_carts(request)
+    cart_items_html = render_to_string(
+        "carts/includes/included_cart.html", {"carts": user_cart}, request=request)
+
+    response_data = {
+        "message": "Товар удалён",
+        "cart_items_html": cart_items_html,
+        "quantity_deleted": quantity,
+    }
+
+    return JsonResponse(response_data)
+
+def cart_change(request, product_slug):
+    pass
