@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
-{% load goods_tags %} 
+{% load goods_tags %}
 
 {% block modal_cart %}
 {% include "includes/cart_button.html" %}
-{% endblock %}
+{% endblock  %}
 
 {% block content %}
 <div class="row">
@@ -72,7 +72,7 @@
         <div class="col-lg-4 col-md-6 p-4">
             <div class="card border-primary rounded custom-shadow" >
                 {% if product.image %}
-                    <img src={{ product.image.url }} class="card-img-top" alt="...">
+                    <img src={{ product.image.url }} class="card-img-top" alt="{{ product.name }}">
                 {% else %}
                     <img src={% static "deps/images/Not found image.png" %} class="card-img-top" alt="...">
                 {% endif %}
@@ -109,8 +109,9 @@
                         {% else %}
                             <p><strong>{{ product.price }} ₽</strong></p>
                         {% endif %}  
-
-                        <a href="{% url "cart:cart_add" product.slug %}" class="btn add-to-cart">
+                        <a href="{% url "cart:cart_add" %}" class="btn add-to-cart"
+                        data-product-id="{{ product.id }}">
+                            {% csrf_token %}
                             <img class="mx-1" src={% static "deps/icons/cart-plus.svg" %} alt="Catalog Icon"
                                 width="32" height="32">
                         </a>
