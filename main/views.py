@@ -21,7 +21,7 @@ def index(request):
     
     context: dict[str, Any]  = {
         'title': 'Home - Главная',
-        'content': 'Магазин мебели HOME',
+        'content': 'Добро пожаловать в магазин мебели Homeland',
         'categories': categories
     }
     return render(request, 'main/index.html', context)
