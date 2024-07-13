@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Categories(models.Model):
@@ -66,7 +67,7 @@ class Products(models.Model):
         decimal_places=0,
         verbose_name="Скидка в %",
     )
-    quantity = models.PositiveIntegerField(default=0, verbose_name="Количество")
+    quantity = models.PositiveIntegerField(default=0, verbose_name="Количество в шт.")
     category = models.ForeignKey(
         to=Categories, on_delete=models.CASCADE, verbose_name="Категория"
     )
@@ -88,8 +89,11 @@ class Products(models.Model):
 
     def __str__(self) -> str:
         """Отображает имя товара в админке."""
-        return f"{self.name}, количество - {self.quantity} шт."
+        return f"{self.name}"
 
+    def get_absolute_url(self):
+        return reverse("catalog:product", kwargs={"product_slug": self.slug})
+    
     def display_id(self):
         """Отображает артикул товара на его карточке."""
         return f"Артикул товара - {self.id:005}"
