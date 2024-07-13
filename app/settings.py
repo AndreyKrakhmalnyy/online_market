@@ -29,6 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+# sudo fuser -k 8000/tcp
 
 # Application definition
 

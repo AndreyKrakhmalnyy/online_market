@@ -6,7 +6,6 @@ class User(AbstractUser):
     """
     Модель User описывает модель пользователя от AbstractUser, которая содержит базовые поля.
     """
-
     image = models.ImageField(
         upload_to="users_images", blank=True, null=True, verbose_name="Аватар"
     )
@@ -20,7 +19,7 @@ class User(AbstractUser):
             verbose_name_plural - строка, содержит название модели на русском языке во множественном числе.
         """
 
-        db_table = "users"
+        db_table = "user"
         verbose_name = "Пользователя"
         verbose_name_plural = "Пользователи"
 

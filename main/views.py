@@ -9,9 +9,9 @@ def index(request):
     Args:
         request: Запрос пользователя.
 
-     Attributes:
+    Attributes:
         categories: QuerySet со всеми категориями товаров.
-        context: Словарь, содержащий данные для шаблона 'main/index.html'.
+        context (dict[str, Any]): Словарь, содержащий данные для шаблона 'main/index.html'.
 
     Returns:
         HttpResponse: Ответ, отображающий шаблон 'main/index.html' с контекстом, содержащим информацию о категориях.
@@ -20,8 +20,8 @@ def index(request):
     categories = Categories.objects.all()
     
     context: dict[str, Any]  = {
-        'title': 'Home - Главная',
-        'content': 'Добро пожаловать в магазин мебели Homeland',
+        'title': 'HomeLand - Главная',
+        'content': 'Добро пожаловать в магазин мебели HomeLand!',
         'categories': categories
     }
     return render(request, 'main/index.html', context)
@@ -32,10 +32,13 @@ def about(request):
     Args:
         request: Запрос пользователя.
 
+    Attributes:
+        context (dict[str, Any]): Словарь, содержащий данные для шаблона 'main/about.html'.
+
     Returns:
         HttpResponse: Ответ, отображающий шаблон 'main/about.html' с контекстом, содержащим заголовок и контент страницы.
     """
-    context = {
+    context: dict[str, Any] = {
         'title': 'Общая информация',
         'content': 'О нас',
     }

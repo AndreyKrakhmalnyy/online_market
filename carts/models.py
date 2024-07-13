@@ -25,7 +25,7 @@ class Cart(models.Model):
     quantity = models.PositiveSmallIntegerField(default=0, verbose_name="Количество")
     session_key = models.CharField(max_length=32, null=True, blank=True)
     created_timestamp = models.DateTimeField(auto_now_add=True, verbose_name="Дата добавления")
-
+    
     class Meta:
         """
         Метаданные для модели.
@@ -46,5 +46,7 @@ class Cart(models.Model):
         """Рассчитывает стоимость товара (со скидкой и без) с учётом его количества."""
         return round(self.product.discount_calculation() * self.quantity, 2)
 
-    def __str__(self) -> str:
-        return f"Корзина пользователя {self.user.username} | Товар {self.product.name} | Количество {self.quantity}"
+    def __str__(self):
+        if self.user:
+            return f"Корзина пользователя {self.user.username} | Товар {self.product.name} | Количество {self.quantity}"
+

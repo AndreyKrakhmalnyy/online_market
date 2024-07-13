@@ -11,11 +11,11 @@ def product(request, product_slug: str):
 
     Args:
         request: Запрос пользователя.
-        product_slug: 'slug' товара.
+        product_slug (str): slug товара.
 
     Attributes:
-        product: Запрашиваемый объект товара из БД по его 'slug'.
-        context: Словарь, содержащий объект товара для передачи в шаблон.
+        product: Запрашиваемый объект товара из БД по его slug.
+        context (dict[str, Products]): Словарь, содержащий объект товара для передачи в шаблон.
 
     Returns:
         HttpResponse: Ответ, отображающий шаблон 'goods/product.html' с контекстом, содержащим объект товара.
@@ -44,7 +44,7 @@ def catalog(request, category_slug: str = None) -> HttpResponse:
         goods: QuerySet с товарами, отфильтрованными и отсортированными по параметрам запроса.
         paginator: Объект 'Paginator' для пагинации товаров.
         current_page: Текущая страница пагинации.
-        context: Словарь, содержащий данные для шаблона 'catalog.html'.
+        context (dict[str, Any]): Словарь, содержащий данные для шаблона 'catalog.html'.
 
     Returns:
         HttpResponse: Ответ, отображающий шаблон 'catalog.html' с контекстом фильтрации и пагинации.
@@ -70,7 +70,7 @@ def catalog(request, category_slug: str = None) -> HttpResponse:
     paginator = Paginator(goods, 3)
     current_page = paginator.page(int(page))
     context: dict[str, Any] = {
-        "title": "Home - Каталог",
+        "title": "HomeLand - Каталог",
         "goods": current_page,
         "slug_url": category_slug,
     }
