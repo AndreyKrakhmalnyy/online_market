@@ -1,7 +1,7 @@
 #python 
 .pylintrc
 __pycache__/
-example.py
+
 
 #ide
 .vscode/
