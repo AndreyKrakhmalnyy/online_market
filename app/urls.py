@@ -13,8 +13,9 @@ urlpatterns = [
     path("orders/", include("orders.urls", namespace="orders")),
     
     path("jwt-token/", include("utils.jwt-auth.urls")),
-    path("swagger/", include("utils.swagger.urls")),
     path("goods-api/", include("goods.api.urls")),
+    path("users-api/", include("users.api.urls")),
+    path("swagger/", include("utils.swagger.urls")),
 ]
 
 if settings.DEBUG:
