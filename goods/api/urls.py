@@ -4,9 +4,9 @@ from goods.api.views import CategoriesViewSet, ProductsViewSet
 
 
 router = routers.DefaultRouter()
-router.register(r'categories', CategoriesViewSet)
-router.register(r'products', ProductsViewSet)
+router.register(r"categories", CategoriesViewSet)
+router.register(r"products", ProductsViewSet)
 
 urlpatterns = [
-    path('goods/', include(router.urls)),
+    path("", include(router.urls)),
 ]
