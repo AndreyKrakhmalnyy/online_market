@@ -206,7 +206,7 @@ SIMPLE_JWT = {
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'HomeLand API',
-    'DESCRIPTION': 'API для получения данных о товарах магазина. Доступ к данным доступен через JWT-токен.',
+    'DESCRIPTION': 'API для получения данных о товарах и пользователях магазина  . Доступ к данным доступен через JWT-токен.',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }
