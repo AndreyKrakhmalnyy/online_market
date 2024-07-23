@@ -70,8 +70,10 @@
 
                                 <div class="col-md-12 mb-3">
                                     <label for="id_email" class="form-label">Email*</label>
-                                    <input type="email" class="form-control" id="id_email" name="email"
-                                        placeholder="Введите ваш email *youremail@example.com" value="{{ form.username.value }}" required>
+                                    <input type="email" class="form-control" id="id_email" 
+                                        name="email"
+                                        placeholder="Введите ваш email *youremail@example.com" 
+                                        value="{{ form.email.value }}" required>
                                         {% if form.email.errors %}
                                             <div class="alert alert-danger alert-dismissible fade show">Ошибка
                                                 {{form.email.errors}}

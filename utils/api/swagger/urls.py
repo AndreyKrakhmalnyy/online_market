@@ -8,6 +8,6 @@ from drf_spectacular.views import (
 
 urlpatterns = [
     path("load-schema/", SpectacularAPIView.as_view(), name="schema"),
-    path("ui/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("endpoints/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
 ]

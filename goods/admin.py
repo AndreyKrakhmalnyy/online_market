@@ -10,8 +10,10 @@ class CategoriesAdmin(admin.ModelAdmin):
 
 @admin.register(Products)
 class ProductsAdmin(admin.ModelAdmin):
-    """Отвечает за регистрацию модели Products в админке, отображает все товары с дополнительными полями по фильтрации и поиску.
+    """Отвечает за регистрацию модели Products в админке, отображает все товары с дополнительными 
+    полями по фильтрации и поиску.
     """
+    
     prepopulated_fields = {"slug": ("name",)}
     list_display = ["name", "quantity", "price", "discount"]
     search_fields = [

@@ -3,7 +3,7 @@ from django.apps import AppConfig
 
 class UsersConfig(AppConfig):
     """
-    Конфигурация приложения.
+    Конфигурация сервиса.
 
     Attributes:
         default_auto_field - указывает, какой тип поля использовать для автоматического генерирования первичных ключей в моделях приложения;

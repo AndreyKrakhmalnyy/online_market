@@ -47,11 +47,11 @@ class Order(models.Model):
     created_timestamp = models.DateTimeField(
         auto_now_add=True, verbose_name="Дата создания заказа"
     )
-    phone_number = models.CharField(max_length=10, verbose_name="Номер телефона")
+    phone_number = models.CharField(max_length=13, verbose_name="Номер телефона")
     requires_delivery = models.BooleanField(
         default=False, verbose_name="Требуется доставка"
     )
-    delivery_address = models.BooleanField(default=True, verbose_name="Адрес доставки")
+    delivery_address = models.TextField(null=True, blank=True, verbose_name="Адрес доставки")
     payment_on_get = models.BooleanField(
         default=False, verbose_name="Оплата при получении"
     )
@@ -129,7 +129,7 @@ class OrderItem(models.Model):
     def products_price(self):
         """Рассчитывает стоимость товара (со скидкой и без) с учётом его количества."""
 
-        return round(self.product.discount_calculation() * self.quantity, 2)
+        return self.price
 
     def __str__(self):
         """Отображает название товара и id заказа в админке."""

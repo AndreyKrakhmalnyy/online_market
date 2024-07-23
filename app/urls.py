@@ -12,8 +12,8 @@ urlpatterns = [
     path("cart/", include("carts.urls", namespace="cart")),
     path("orders/", include("orders.urls", namespace="orders")),
     
-    path("Jwt-token/", include("utils.jwt-auth.urls")),
-    path("swagger/", include("utils.swagger.urls")),
+    path("Jwt-token/", include("utils.auth.jwt-auth.urls")),
+    path("swagger/", include("utils.api.swagger.urls")),
     path("goods-api/", include("goods.api.urls")),
     path("users-api/", include("users.api.urls")),
 ]

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from carts.admin import CartTablesAdmin
+from orders.admin import OrderTableAdmin
 from users.models import User
 
 
@@ -11,4 +12,4 @@ class UsersAdmin(admin.ModelAdmin):
     list_display = ["username", "first_name", "last_name", "email", "is_staff"]
     list_filter = ["is_staff"]
     search_fields = ["username", "first_name", "last_name", "email",]
-    inlines = [CartTablesAdmin,]
+    inlines = [CartTablesAdmin, OrderTableAdmin,]
