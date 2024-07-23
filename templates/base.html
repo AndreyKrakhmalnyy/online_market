@@ -22,9 +22,9 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+        <nav class="navbar navbar-expand-lg bg-dark custom-shadow" data-bs-theme="dark">
             <div class="container">
-                <a class="navbar-brand" href={% url "main:index" %}>Главная</a>
+                <a class="navbar-brand" href={% url "main:index" %}><b>Главная</b></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,7 @@
                         <li class="nav-item dropdown ">
                             <a class="nav-link dropdown-toggle text-white" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                Информация
+                                <b>Информация</b>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item  text-white" href="#">Доставка и оплата</a></li>
@@ -44,7 +44,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link  text-white" href="{% url "user:users-cart" %}">Корзина</a>
+                            <a class="nav-link  text-white" href="{% url "user:users-cart" %}"><b>Корзина</b></a>
                         </li>
                         <!--Проверка пользователя на авторизованность (если не авторизован, то отображать кнопку Войти)-->
                         {% if not user.is_authenticated %}
@@ -56,7 +56,7 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-white" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
-                                    Мой профиль
+                                    <b>Мой профиль</b>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item  text-white" href="{% url "user:users-cart" %}">Корзина</a></li>
@@ -75,7 +75,7 @@
                     </ul>
                     <!--Для корректного поиска на сайте добавляем в forms соответствующий url (name:namespace), method, затем в input - name="q"-->
                     <form class="d-flex" role="search" action="{% url "catalog:search" %}" method="get">
-                        <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search" >
+                        <input class="form-control me-2" type="search" name="q" placeholder="Введите запрос..." style="font-style: italic" aria-label="Search" >
                         <button class="btn btn-outline-success text-white" type="submit">Поиск</button>
                     </form>
                 </div>
@@ -87,7 +87,7 @@
             <!-- Каталог и корзина с фиксированным расположением на странице -->
             <div class="row mt-1 position-fixed z-3">
                 <!-- Каталог -->
-                <div class="dropdown mb-2">
+                <div class="dropdown mb-2" style="margin-top: 10px;">
                     <button class="btn btn-secondary dropdown-toggle btn-dark" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         Каталог
