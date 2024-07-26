@@ -16,6 +16,7 @@ urlpatterns = [
     path("swagger/", include("utils.api.swagger.urls")),
     path("goods-api/", include("goods.api.urls")),
     path("users-api/", include("users.api.urls")),
+    path("orders-api/", include("orders.api.urls")),
 ]
 
 if settings.DEBUG:
@@ -24,3 +25,7 @@ if settings.DEBUG:
     ]
 
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+"http://127.0.0.1:8000/admin"
+"http://127.0.0.1:8000/swagger/endpoints/"
