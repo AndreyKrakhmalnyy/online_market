@@ -14,7 +14,11 @@ class CartsAdmin(admin.ModelAdmin):
             return str(obj.user)
         return "Анонимный пользователь"
     
+    def product_display(self, obj):
+        return str(obj.product.name)
+
     user_display.short_description = "Пользователь"
+    product_display.short_description = "Товар"
     
 class CartTablesAdmin(admin.TabularInline):
     model = Cart

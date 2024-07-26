@@ -1,6 +1,6 @@
 from typing import Any
 from django.core.paginator import Paginator
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_list_or_404, render
 from goods.models import Products
 from goods.utils import q_search
@@ -59,7 +59,9 @@ def catalog(request, category_slug: str = None) -> HttpResponse:
     elif query:
         goods = q_search(query)
     else:
-        goods = get_list_or_404(Products.objects.filter(category__slug=category_slug))
+        goods = Products.objects.filter(category__slug=category_slug)
+        if not goods.exists():
+            raise Http404()
 
     if on_sale:
         goods = Products.objects.filter(discount__gt=0)
@@ -70,7 +72,7 @@ def catalog(request, category_slug: str = None) -> HttpResponse:
     paginator = Paginator(goods, 3)
     current_page = paginator.page(int(page))
     context: dict[str, Any] = {
-        "title": "HomeLand - Каталог",
+        "title": "Каталог",
         "goods": current_page,
         "slug_url": category_slug,
     }

@@ -72,6 +72,7 @@ class Order(models.Model):
         db_table = "order"
         verbose_name = "Заказ"
         verbose_name_plural = "Заказы"
+        ordering = ("id",)
 
     def __str__(self):
         """Отображает номер заказа и имя покупателя в админке."""
@@ -121,6 +122,7 @@ class OrderItem(models.Model):
         db_table = "order_item"
         verbose_name = "Проданный товар"
         verbose_name_plural = "Проданные товары"
+        ordering = ("id",)
 
     objects = OrderQueryset().as_manager()
 
