@@ -4,6 +4,9 @@
 {% load carts_tags %}
 
 {% block content %}
+<head>
+    <title>{{ title }}</title>
+</head>
 <div class="row">
     <div class="container mt-5">
         <div class="row">
@@ -129,7 +132,7 @@
                                             </tbody>
                                         </table>
                                         <div>
-                                            <h6><strong>Итого: </strong>{{ order.total_price }} ₽</h6>
+                                            <h6><strong>Итого: </strong>{{ order.orderitem_set.total_price }} ₽</h6>
                                         </div>
                                     </div>
                                 </div>

@@ -188,38 +188,38 @@ $(document).ready(function () {
         }, 7000);
     }
 
-    // При клике по значку корзины открываем всплывающее(модальное) окно
-    $('#modalButton').click(function () {
-        $('#exampleModal').appendTo('body');
+// При клике по значку корзины открываем всплывающее(модальное) окно
+$('#modalButton').click(function () {
+    $('#exampleModal').appendTo('body');
 
-        $('#exampleModal').modal('show');
-    });
+    $('#exampleModal').modal('show');
+});
 
-    // Собыите клик по кнопке закрыть окна корзины
-    $('#exampleModal .btn-close').click(function () {
-        $('#exampleModal').modal('hide');
-    });
+// Собыите клик по кнопке закрыть окна корзины
+$('#exampleModal .btn-close').click(function () {
+    $('#exampleModal').modal('hide');
+});
 
-    // Обработчик события радиокнопки выбора способа доставки
-    $("input[name='requires_delivery']").change(function () {
-        var selectedValue = $(this).val();
-        // Скрываем или отображаем input ввода адреса доставки
-        if (selectedValue === "1") {
-            $("#deliveryAddressField").show();
-        } else {
-            $("#deliveryAddressField").hide();
-        }
-    });
+// Обработчик события радиокнопки выбора способа доставки
+$("input[name='requires_delivery']").change(function () {
+    var selectedValue = $(this).val();
+    // Скрываем или отображаем input ввода адреса доставки
+    if (selectedValue === "1") {
+        $("#deliveryAddressField").show();
+    } else {
+        $("#deliveryAddressField").hide();
+    }
+});
 
     document.getElementById('id_phone_number').addEventListener('input', function (e) {
-        var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-        e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+        var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+        e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '') + (x[4] ? '-' + x[4] : '');
     });
 
     // Проверяем на стороне клиента коррекность номера телефона в форме xxx-xxx-хх-хx
     $('#create_order_form').on('submit', function (event) {
         var phoneNumber = $('#id_phone_number').val();
-        var regex = /^\(\d{3}\) \d{3}-\d{4}$/;
+        var regex = /^\(\d{3}\) \d{3}-\d{2}-\d{2}$/;
 
         if (!regex.test(phoneNumber)) {
             $('#phone_number_error').show();

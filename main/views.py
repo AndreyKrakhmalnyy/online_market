@@ -20,7 +20,7 @@ def index(request):
     categories = Categories.objects.all()
     
     context: dict[str, Any]  = {
-        'title': 'HomeLand - Главная',
+        'title': 'Главная',
         'content': 'Добро пожаловать в магазин мебели HomeLand!',
         'categories': categories
     }

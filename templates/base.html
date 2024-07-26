@@ -75,7 +75,7 @@
                     </ul>
                     <!--Для корректного поиска на сайте добавляем в forms соответствующий url (name:namespace), method, затем в input - name="q"-->
                     <form class="d-flex" role="search" action="{% url "catalog:search" %}" method="get">
-                        <input class="form-control me-2" type="search" name="q" placeholder="Введите запрос..." style="font-style: italic" aria-label="Search" >
+                        <input class="form-control me-2" type="search" name="q" placeholder="Введите запрос..." aria-label="Search" >
                         <button class="btn btn-outline-success text-white" type="submit">Поиск</button>
                     </form>
                 </div>

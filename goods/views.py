@@ -72,7 +72,7 @@ def catalog(request, category_slug: str = None) -> HttpResponse:
     paginator = Paginator(goods, 3)
     current_page = paginator.page(int(page))
     context: dict[str, Any] = {
-        "title": "Каталог",
+        "title": "Каталог товаров",
         "goods": current_page,
         "slug_url": category_slug,
     }

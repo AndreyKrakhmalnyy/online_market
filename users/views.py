@@ -123,7 +123,7 @@ def profile(request):
 
     
     context = {
-        "profile": "Личный кабинет",
+        "title": "Личный кабинет",
         "form": form,
         "orders": orders,
     }
@@ -147,4 +147,8 @@ def logout(request):
 
 
 def users_cart(request):
-    return render(request, "users/users_cart.html")
+    context = {
+        "title": "Список товаров",
+    }
+    
+    return render(request, "users/users_cart.html", context)

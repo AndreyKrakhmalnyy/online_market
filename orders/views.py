@@ -14,7 +14,7 @@ def create_order(request):
         form = CreateOrderForm(data=request.POST)
         if form.is_valid():
             if form.cleaned_data['requires_delivery'] == "1" and not form.cleaned_data['delivery_address']:
-                messages.warning(request, 'Введите адрес доставки!')
+                messages.warning(request, 'Введите адрес доставки')
                 return redirect('orders:create_order')
             else:
                 try:
@@ -39,7 +39,7 @@ def create_order(request):
                                 
                                 try:
                                     if product.quantity < quantity:
-                                        messages.warning(request, 'Недостаточное количество товара на складе!')
+                                        messages.warning(request, 'Недостаточное количество товара на складе')
                                         return redirect('orders:create_order')
                                     
                                     OrderItem.objects.create(

@@ -46,13 +46,13 @@
                             <input type="text" class="form-control" id="id_phone_number" 
                                 name="phone_number"
                                 value="{% if form.phone_number.value %}{{ form.phone_number.value }}{% endif %}"
-                                placeholder="В формате (без 7 или 8): 1234567890"
+                                placeholder="В формате (без 7 или 8): (123)-456-78-90"
                                 required>
                             {% if form.phone_number.errors %}
                                 <div class="alert alert-danger alert-dismissible fade show">{{form.phone_number.errors}}</div>
                             {% endif %}
                             <div class="alert alert-danger alert-dismissible fade show" style="display: none" 
-                                id="phone_number_error">Неверный формат номера</div>
+                                id="phone_number_error"></div>
                         </div>
                         <div class="col-md-12 mb-3">
                             <label for="delivery" class="form-label">Способ доставки: </label>
