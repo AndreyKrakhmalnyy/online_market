@@ -64,6 +64,6 @@ def create_order(request):
     context = {
         'title': 'HomeLand - Оформление заказа',
         'form': form,
-        'order': order,
+        'order': True,
     }
     return render(request, "orders/create_order.html", context=context)

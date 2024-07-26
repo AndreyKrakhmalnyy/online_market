@@ -19,7 +19,6 @@ class OrderQueryset(models.QuerySet):
             return sum(cart.quantity for cart in self)
         return 0
 
-
 class Order(models.Model):
     """
     Представляет собой модель для описания заказа.
@@ -78,7 +77,6 @@ class Order(models.Model):
         """Отображает номер заказа и имя покупателя в админке."""
         return f"Заказ № {self.pk} | Покупатель - {self.user.last_name} {self.user.first_name}"
 
-
 class OrderItem(models.Model):
     """
     Представляет собой модель для описания товара в заказе.
@@ -128,8 +126,7 @@ class OrderItem(models.Model):
 
     def products_price(self):
         """Рассчитывает стоимость товара (со скидкой и без) с учётом его количества."""
-
-        return self.price
+        return round(self.product.discount_calculation() * self.quantity, 2)
 
     def __str__(self):
         """Отображает название товара и id заказа в админке."""
