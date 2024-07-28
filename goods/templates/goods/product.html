@@ -7,15 +7,15 @@
 
 {% block content %}
     <div class="container mt-5">
-        <div class="card mb-4 custom-shadow">
+        <div class="card mb-4 custom-shadow" style="width: 85%">
             <div class="row">
                 <!-- Миниатюры -->
                 <div class="col-md-4">
                     <img src="{{ product.image.url }}"
                         class="img-thumbnail" data-bs-toggle="modal" data-bs-target="#imageModal1">
                 </div>
-                <div class="col-md-4 ">
-                    <p class="product_id mt-3">{{ product.display_id }}</p>
+                <div class="col-md-8">
+                    <div class="card-text" style="font-size: 17px; margin-top: 20px">{{ product.description }}</div> 
                 </div>
                 <!-- Увеличить изображение в модальном окне -->
                 <div class="modal fade" id="imageModal1" tabindex="-1"
@@ -37,9 +37,9 @@
             </div>
             <!-- Описание товара -->
             <div class="card-body">
-                <p class="card-text">Цена: <strong>{{ product.discount_calculation }}</strong></p>
                 <h5 class="card-title">{{ product.name }}</h5>
-                <p class="card-text">{{ product.descripion }}</p>
+                <div class="card-text" style="font-size: 18px"><i>Цена:</i> <strong>{{ product.discount_calculation }}</strong></div>
+                <p class="product_id mt-2">{{ product.display_id }}</p>
                 <a href="{% url "cart:cart_add" %}" class="btn btn-dark add-to-cart"
                 data-product-id="{{ product.id }}">
                 {% csrf_token %}
@@ -50,9 +50,10 @@
 {% endblock %}
 
 {% block footer %}
+    <div style="padding-bottom: 55px"></div>
     <footer class="py-4" style="background-color: transparent">
         <div class="container">
-            <p class="m-0 text-center text-white" style="font-size: 20px"><i>HomeLand</i> &copy; 2024</p>
+            <p class="m-5 text-center text-white" style="font-size: 16px; text-shadow: 1px 2px #000"><i>HomeLand</i> &copy; 2024</p>
         </div>
     </footer>
 {% endblock %}  

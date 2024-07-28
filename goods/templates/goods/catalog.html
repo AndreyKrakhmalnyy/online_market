@@ -127,28 +127,24 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center my-4">
             <div class="custom-shadow d-flex">
-
-                <li class="page-item {% if not goods.has_previous %} disabled {% endif %}">
-                <a class="page-link" href="{% if goods.has_previous %}?{% change_parameters page=goods.previous_page_number %}{% else %}#{% endif %}">Предыдущая</a>
+                <li class="page-item {% if not page_obj.has_previous %} disabled {% endif %}">
+                <a class="page-link" href="{% if page_obj.has_previous %}?{% change_parameters page=page_obj.previous_page_number %}{% else %}#{% endif %}">Предыдущая</a>
                 </li>
-
-                <!--Цикл, в котором к переменной paginator, которая разбивает список товаров на части и отображает указанное количество, применяется метод
-                    page_range, который возвращает список номеров страниц, доступных для навигации по результатам пагинации.-->
-                {% for page in goods.paginator.page_range %}
+                {% for page in page_obj.paginator.page_range %}
                     <!--Это условие в шаблоне проверяет, находится ли текущий номер страницы (page) в пределах 2 страниц от текущей страницы в наборе данных (goods.number).--> 
-                    {% if page >= goods.number|add:-2 and page <= goods.number|add:2 %}
+                    {% if page >= page_obj.number|add:-2 and page <= page_obj.number|add:2 %}
                         <!--Если условие if выше выполняется, то проверяется условие ниже, в котором если текущий номер страницы (`page`) совпадает с номером текущей страницы
                             в наборе данных (`goods.number`), то добавляет класс `active`, который помечает кнопку цветом, если мы на ней находимся.-->
-                        <li class="page-item {% if goods.number == page %} active {% endif %}">
+                        <li class="page-item {% if page_obj.number == page %} active {% endif %}">
                             <!--Передаётся тэг change_parameters (page из цикла for=page из views.py) из templatetags/goods_tags и обновляет контекст пагинации.--> 
                             <a class="page-link" href="?{% change_parameters page=page %}">{{ page }}</a>
                         </li>
                     {% endif %}
                 {% endfor %}
                 <!--Используем метод класса Paginator, определённый в views.py, который отключает кнопку перехода на следующую страницу, если мы находимся на последней странице. -->
-                <li class="page-item {% if not goods.has_next %} disabled {% endif %}">
+                <li class="page-item {% if not page_obj.has_next %} disabled {% endif %}">
                     <!--Также используем метод класса Paginator, в котором если у нас есть следующая страница, то change_parameters принимает и устанавливает новую страницу, и не устанавливает ничего в любом другом случае. -->
-                    <a class="page-link" href="{% if goods.has_next %}?{% change_parameters page=goods.next_page_number %}{% else %}#{% endif %}">Следующая</a>
+                    <a class="page-link" href="{% if page_obj.has_next %}?{% change_parameters page=page_obj.next_page_number %}{% else %}#{% endif %}">Следующая</a>
                 </li>
                 </li>
             </div>
@@ -156,12 +152,11 @@
     </nav>
 {% endif %}
 {% endblock %}
-
 <!-- Футер -->
 {% block footer %}
-    <footer class="py-4" style="background-color: transparent">
+    <footer style="background-color: transparent">
         <div class="container">
-            <p class="m-0 text-center text-white" style="font-size: 20px"><i>HomeLand</i> &copy; 2024</p>
+            <p class="m-5 text-center text-white" style="font-size: 16px; text-shadow: 1px 2px #000"><i>HomeLand</i> &copy; 2024</p>
         </div>
     </footer>
 {% endblock %}
