@@ -1,135 +1,113 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth, messages
 from django.db.models import Prefetch
+from django.db.models.base import Model as Model
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
-from django.urls import reverse
-from numpy import delete
+from django.shortcuts import HttpResponseRedirect, redirect
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, TemplateView, UpdateView
 from carts.models import Cart
 from orders.models import Order, OrderItem
 from users.forms import UserLoginForm, UserRegistrationForm, ProfileForm
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
+class UserLoginView(LoginView):
+    template_name = "users/login.html"
+    form_class = UserLoginForm
 
-def login(request):
-    """Обрабатывает форму авторизации пользователя.
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Авторизация"
+        context["slug_url"] = self.kwargs.get("category_slug")
+        return context
 
-    Args:
-        request: Запрос пользователя.
+    def get_success_url(self):
+        redirect_page = self.request.POST.get("next", None)
+        if redirect_page and redirect_page != reverse("user:logout"):
+            return redirect_page
+        return reverse_lazy("main:index")
 
-    Returns:
-        HttpResponse: Ответ, отображающий шаблон users/login.html с формой авторизации или перенаправляющий на главную страницу
-            после успешной авторизации.
-    """
-    if request.method == "POST":
-        form = UserLoginForm(data=request.POST)
+    def form_valid(self, form):
+        session_key = self.request.session.session_key
+        user = form.get_user()
 
-        if form.is_valid():
-            username = request.POST["username"]
-            password = request.POST["password"]
-            user = auth.authenticate(username=username, password=password)
-            session_key = request.session.session_key
+        if user:
+            auth.login(self.request, user)
 
-            if user:
-                auth.login(request, user)
-                messages.success(request, f"{username}, Вы вошли в аккаунт")
+            if session_key:
+                old_carts = Cart.objects.filter(user=user)
 
-                if session_key:
-                    old_carts = Cart.objects.filter(user=user)
-                    
-                    if old_carts.exists():
-                        old_carts.delete()
-                    Cart.objects.filter(session_key=session_key).update(user=user)    
-                    
-                redirect_page = request.POST.get("next")
-                if redirect_page and redirect_page != reverse("user:logout"):
-                    return HttpResponseRedirect(request.POST.get("next"))
-                return HttpResponseRedirect(reverse("main:index"))
-
-    else:
-        form = UserLoginForm()
-
-    context = {"title": "Авторизация", "form": form}
-    return render(request, "users/login.html", context)
+                if old_carts.exists():
+                    old_carts.delete()
+                Cart.objects.filter(session_key=session_key).update(user=user)
+                messages.success(self.request, f"{user.username}, Вы вошли в аккаунт")
+                return HttpResponseRedirect(self.get_success_url())
 
 
-def registration(request):
-    """Обрабатывает форму регистрации пользователя с сохранением текущей сессии.
+class UserRegistrationView(CreateView):
+    template_name = "users/registration.html"
+    form_class = UserRegistrationForm
 
-    Args:
-        request: Запрос пользователя.
+    def form_valid(self, form):
+        session_key = self.request.session.session_key
+        user = form.instance
 
-    Returns:
-        HttpResponse: Ответ, отображающий шаблон users/registration.html с формой регистрации или перенаправляющий на главную
-            страницу после успешной регистрации
-    """
-
-    if request.method == "POST":
-        form = UserRegistrationForm(data=request.POST)
-
-        if form.is_valid():
+        if user:
             form.save()
-            session_key = request.session.session_key
-            user = form.instance
-            auth.login(request, user)
+            auth.login(self.request, user)
 
             if session_key:
                 Cart.objects.filter(session_key=session_key).update(user=user)
+            messages.success(self.request, f"{user.username}, Вы вошли в аккаунт")
+            return HttpResponseRedirect(self.success_url)
 
-            messages.success(
-                request,
-                f"{user.username}, Вы успешно зарегистрированы и вошли в аккаунт",
+    def get_success_url(self):
+        return reverse_lazy("user:profile")
+
+
+class UserProfileView(LoginRequiredMixin, UpdateView):
+    template_name = "users/profile.html"
+    form_class = ProfileForm
+
+    def get_object(self, queryset=None):
+        return self.request.user
+    
+    def get_success_url(self):
+        return reverse_lazy("user:profile")
+    
+    def form_valid(self, form):
+        messages.success(self.request, "Ваши данные обновлены")
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.warning(self.request, "Произошла ошибка")
+        return super().form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Личный кабинет"
+        context["orders"] = (
+            Order.objects.filter(user=self.request.user)
+            .prefetch_related(
+                Prefetch(
+                    "orderitem_set",
+                    queryset=OrderItem.objects.select_related("product"),
+                )
             )
-            return HttpResponseRedirect(reverse("main:index"))
-
-    else:
-        form = UserRegistrationForm()
-
-    context = {
-        "registration": "Home - Регистрация",
-        "form": form,
-    }
-    return render(request, "users/registration.html", context)
-
-
-@login_required
-def profile(request):
-    """Обрабатывает форму редактирования профиля авторизованного пользователя.
-
-    Args:
-        request: Запрос пользователя.
-
-    Returns:
-        HttpResponse: Ответ, отображающий шаблон 'users/profile.html' с формой редактирования профиля или перенаправляющий
-            на страницу 'next' после успешного обновления.
-    """
-    if request.method == "POST":
-        form = ProfileForm(
-            data=request.POST, instance=request.user, files=request.FILES
+            .order_by("-id")
         )
 
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Ваши данные обновлены")
-            return HttpResponseRedirect(reverse("user:profile"))
-
-    else:
-        form = ProfileForm(instance=request.user)
-
-    orders = Order.objects.filter(user=request.user).prefetch_related(
-        Prefetch(
-            "orderitem_set",
-            queryset=OrderItem.objects.select_related("product"))).order_by("-id")
-
+        return context
     
-    context = {
-        "title": "Личный кабинет",
-        "form": form,
-        "orders": orders,
-    }
-
-    return render(request, "users/profile.html", context)
-
+class UserCartView(TemplateView):
+    template_name = "users/users_cart.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Список товаров"
+        return context
 
 @login_required
 def logout(request):
@@ -146,9 +124,132 @@ def logout(request):
     return redirect(reverse("main:index"))
 
 
-def users_cart(request):
-    context = {
-        "title": "Список товаров",
-    }
-    
-    return render(request, "users/users_cart.html", context)
+# def users_cart(request):
+#     context = {
+#         "title": "Список товаров",
+#     }
+
+#     return render(request, "users/users_cart.html", context)
+
+
+# def login(request):
+#     """Обрабатывает форму авторизации пользователя.
+
+#     Args:
+#         request: Запрос пользователя.
+
+#     Returns:
+#         HttpResponse: Ответ, отображающий шаблон users/login.html с формой авторизации или перенаправляющий на главную страницу
+#             после успешной авторизации.
+#     """
+#     if request.method == "POST":
+#         form = UserLoginForm(data=request.POST)
+
+#         if form.is_valid():
+#             username = request.POST["username"]
+#             password = request.POST["password"]
+#             user = auth.authenticate(username=username, password=password)
+#             session_key = request.session.session_key
+
+#             if user:
+#                 auth.login(request, user)
+#                 messages.success(request, f"{username}, Вы вошли в аккаунт")
+
+#                 if session_key:
+#                     old_carts = Cart.objects.filter(user=user)
+
+#                     if old_carts.exists():
+#                         old_carts.delete()
+#                     Cart.objects.filter(session_key=session_key).update(user=user)
+
+#                 redirect_page = request.POST.get("next")
+#                 if redirect_page and redirect_page != reverse("user:logout"):
+#                     return HttpResponseRedirect(request.POST.get("next"))
+
+#     else:
+#         form = UserLoginForm()
+
+#     context = {"title": "Авторизация", "form": form}
+#     return render(request, "users/login.html", context)
+
+# def registration(request):
+#     """Обрабатывает форму регистрации пользователя с сохранением текущей сессии.
+
+#     Args:
+#         request: Запрос пользователя.
+
+#     Returns:
+#         HttpResponse: Ответ, отображающий шаблон users/registration.html с формой регистрации или перенаправляющий на главную
+#             страницу после успешной регистрации
+#     """
+
+#     if request.method == "POST":
+#         form = UserRegistrationForm(data=request.POST)
+
+#         if form.is_valid():
+#             form.save()
+#             session_key = request.session.session_key
+#             user = form.instance
+#             auth.login(request, user)
+
+#             if session_key:
+#                 Cart.objects.filter(session_key=session_key).update(user=user)
+
+#             messages.success(
+#                 request,
+#                 f"{user.username}, Вы успешно зарегистрированы и вошли в аккаунт",
+#             )
+#             return HttpResponseRedirect(reverse("main:index"))
+
+#     else:
+#         form = UserRegistrationForm()
+
+#     context = {
+#         "registration": "Home - Регистрация",
+#         "form": form,
+#     }
+#     return render(request, "users/registration.html", context)
+
+
+
+# @login_required
+# def profile(request):
+#     """Обрабатывает форму редактирования профиля авторизованного пользователя.
+
+#     Args:
+#         request: Запрос пользователя.
+
+#     Returns:
+#         HttpResponse: Ответ, отображающий шаблон 'users/profile.html' с формой редактирования профиля или перенаправляющий
+#             на страницу 'next' после успешного обновления.
+#     """
+#     if request.method == "POST":
+#         form = ProfileForm(
+#             data=request.POST, instance=request.user, files=request.FILES
+#         )
+
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, "Ваши данные обновлены")
+#             return HttpResponseRedirect(reverse("user:profile"))
+
+#     else:
+#         form = ProfileForm(instance=request.user)
+
+#     orders = (
+#         Order.objects.filter(user=request.user)
+#         .prefetch_related(
+#             Prefetch(
+#                 "orderitem_set", queryset=OrderItem.objects.select_related("product")
+#             )
+#         )
+#         .order_by("-id")
+#     )
+
+#     context = {
+#         "title": "Личный кабинет",
+#         "form": form,
+#         "orders": orders,
+#     }
+
+#     return render(request, "users/profile.html", context)

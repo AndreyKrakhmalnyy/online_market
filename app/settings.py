@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
-from django.conf.global_settings import AUTH_USER_MODEL, LOGIN_URL
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -161,6 +160,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 AUTH_USER_MODEL = "users.User"
 
 LOGIN_URL = "/user/login/"
+
+LOGIN_REDIRECT_URL = "/"
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),

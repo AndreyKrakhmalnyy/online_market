@@ -23,7 +23,6 @@ class ProductView(DetailView):
         return context
 
 class CatalogView(ListView):
-    # model = Products
     queryset = Products.objects.all().order_by("-id")
     context_object_name = "goods"
     template_name = "goods/catalog.html"
