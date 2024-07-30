@@ -4,7 +4,7 @@
 
 {% block modal_cart %}
 {% include "includes/cart_button.html" %}
-{% endblock  %}
+{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -59,13 +59,12 @@
         </form>
     </div>
 
-    <!-- Карта товара -->
     {% if request.GET.q %} <!--Если поступает запрос get.q-->
     <h3 class="mt-4">Результаты поиска по запросу "{{ request.GET.q }}":</h3> <!--То показать надпись-->
-    {% if not goods %} <!--Если ничего не найдено-->
-        <link rel="stylesheet" href={% static "deps/css/my_footer_css.css" %}>
-        <h3 class="mt-4">По запросу ничего не найдено.</h3> <!--То показать надпись-->
-    {% endif %}
+        {% if not goods %} <!--Если ничего не найдено-->
+            <link rel="stylesheet" href={% static "deps/css/my_footer_css.css" %}>
+            <h3 class="mt-4">По запросу ничего не найдено.</h3> <!--То показать надпись-->
+        {% endif %}
     {% endif %}
 
     {% for product in goods %}
@@ -152,11 +151,13 @@
     </nav>
 {% endif %}
 {% endblock %}
+
 <!-- Футер -->
 {% block footer %}
-    <footer style="background-color: transparent">
-        <div class="container">
-            <p class="m-5 text-center text-white" style="font-size: 16px; text-shadow: 1px 2px #000"><i>HomeLand</i> &copy; 2024</p>
-        </div>
-    </footer>
+<footer class="custom-footer">
+    <div class="container">
+        <p class="text-center text-white footer-text-size footer-text-style">KitchenLand &copy; 2024</p>
+    </div>
+</footer>
 {% endblock %}
+

@@ -1,4 +1,6 @@
+from django.utils.safestring import mark_safe
 from django.views.generic import TemplateView
+import markdown
 
 
 class IndexView(TemplateView):
@@ -7,18 +9,23 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Главная страница'
-        context['content'] = 'Добро пожаловать в магазин мебели HomeLand!'
+        context['content'] = 'Добро пожаловать в интернет-магазин мебели KitchenLand!'
         return context
 
 class AboutView(TemplateView):
     template_name = 'main/about.html'
     
     def get_context_data(self, **kwargs):
+        
+        with open('main/descriptions/about.md', 'r', encoding='utf-8') as f:
+            description = f.read()
+            description_html = mark_safe(markdown.markdown(description))
+            
         context = super().get_context_data(**kwargs)
         context['title'] = 'Общая информация'
-        context['content'] = 'О нас'
+        context['description'] = description_html
+        
         return context
-
 
 
 # def index(request):
@@ -39,7 +46,7 @@ class AboutView(TemplateView):
     
 #     context: dict[str, Any]  = {
 #         'title': 'Главная',
-#         'content': 'Добро пожаловать в магазин мебели HomeLand!',
+#         'content': 'Добро пожаловать в магазин мебели KitchenLand!',
 #         'categories': categories
 #     }
 #     return render(request, 'main/index.html', context)

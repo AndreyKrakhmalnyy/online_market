@@ -7,6 +7,10 @@ body {
   height: 100%;
 }
 
+.oval-shape {
+  border-radius: 50px;
+}
+
 .dropdown-toggle::after {
   content: none;
 }

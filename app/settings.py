@@ -206,7 +206,7 @@ SIMPLE_JWT = {
 # API configs
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'HomeLand API',
+    'TITLE': 'KitchenLand API',
     'DESCRIPTION': 'API для получения данных о товарах, заказах и пользователях магазина. Доступ к данным доступен через jwt-токен.',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
@@ -218,3 +218,19 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+# Cache configs
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]

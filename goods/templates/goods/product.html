@@ -38,7 +38,7 @@
             <!-- Описание товара -->
             <div class="card-body">
                 <h5 class="card-title">{{ product.name }}</h5>
-                <div class="card-text" style="font-size: 18px"><i>Цена:</i> <strong>{{ product.discount_calculation }}</strong></div>
+                <div class="card-text" style="font-size: 18px"><i>Цена:</i> <strong>{{ product.discount_calculation }} ₽</strong></div>
                 <p class="product_id mt-2">{{ product.display_id }}</p>
                 <a href="{% url "cart:cart_add" %}" class="btn btn-dark add-to-cart"
                 data-product-id="{{ product.id }}">
@@ -50,10 +50,9 @@
 {% endblock %}
 
 {% block footer %}
-    <div style="padding-bottom: 55px"></div>
-    <footer class="py-4" style="background-color: transparent">
+    <footer class="custom-footer">
         <div class="container">
-            <p class="m-5 text-center text-white" style="font-size: 16px; text-shadow: 1px 2px #000"><i>HomeLand</i> &copy; 2024</p>
+            <p class="text-center text-white footer-text-size footer-text-style">KitchenLand &copy; 2024</p>
         </div>
     </footer>
 {% endblock %}  

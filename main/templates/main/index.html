@@ -4,6 +4,7 @@
 
 {% block css %}
     <link rel="stylesheet" href={% static "deps/css/my_footer_css.css" %}>
+    <link rel="stylesheet" href={% static "deps/css/main_content.css" %}>
 {% endblock  %}
 
 {% block modal_cart %}
@@ -11,13 +12,13 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="mt-5 pt-5 text-white"><strong style="text-shadow: 1px 2px #000">{{ content }}</strong></h1>
+    <h2 class="mt-5 pt-5 text-white index-text-content">{{ content }}</h2>
 {% endblock %}
 
 {% block footer %}
-    <footer class="py-4" style="background-color: transparent">
+    <footer>
         <div class="container">
-            <p class="m-0 text-center text-white" style="font-size: 16px; text-shadow: 1px 2px #000"><i>HomeLand</i> &copy; 2024</p>
+            <p class="text-center text-white">KitchenLand &copy; 2024</p>
         </div>
     </footer>
 {% endblock %}

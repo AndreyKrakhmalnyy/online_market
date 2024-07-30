@@ -1,10 +1,13 @@
-from typing import Any
 from django.db.models.base import Model as Model
-from django.db.models.query import QuerySet
 from django.views.generic import DetailView, ListView
 from goods.models import Products
 from goods.utils import q_search
 from django.http import Http404
+# from django.shortcuts import redirect
+# from django.urls import reverse
+# from django.views.decorators.cache import cache_page
+# from django.db.models.query import QuerySet
+# from django.contrib import messages
 
 
 class ProductView(DetailView):
@@ -13,7 +16,7 @@ class ProductView(DetailView):
     slug_url_kwarg = "product_slug"
     allow_empty = False
     
-    def get_object(self, queryset=None) -> Model:
+    def get_object(self, queryset=None):
         product = Products.objects.get(slug=self.kwargs.get(self.slug_url_kwarg))
         return product
     
@@ -22,13 +25,14 @@ class ProductView(DetailView):
         context['title'] = self.object.name
         return context
 
+
 class CatalogView(ListView):
     queryset = Products.objects.all().order_by("-id")
     context_object_name = "goods"
     template_name = "goods/catalog.html"
     paginate_by = 3
     
-    def get_queryset(self) -> QuerySet[Any]:
+    def get_queryset(self):
         category_slug = self.kwargs.get("category_slug")
         on_sale = self.request.GET.get("on_sale")
         order_by = self.request.GET.get("order_by")
