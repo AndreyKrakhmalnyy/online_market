@@ -75,39 +75,51 @@ class UserProfileView(LoginRequiredMixin, CacheMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
-    
+
     def get_success_url(self):
         return reverse_lazy("user:profile")
-    
+
     def form_valid(self, form):
         messages.success(self.request, "Ваши данные обновлены")
         return super().form_valid(form)
-    
+
     def form_invalid(self, form):
         messages.warning(self.request, "Произошла ошибка")
         return super().form_invalid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = "Личный кабинет"
-        
-        orders = Order.objects.filter(user=self.request.user).prefetch_related(
+    def orders_caching(self):
+        orders = (
+            Order.objects.filter(user=self.request.user)
+            .prefetch_related(
                 Prefetch(
                     "orderitem_set",
                     queryset=OrderItem.objects.select_related("product"),
                 )
-            ).order_by("-id")
+            )
+            .order_by("-id")
+        )
+        
+        set_cache_orders = self.set_cache(
+            orders, f"user_{self.request.user.id}_orders", 60
+        )
+        return set_cache_orders
+        
 
-        context['orders'] = self.set_cache(orders, f"user_{self.request.user.id}_orders", 60)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Личный кабинет"
+        context["orders"] = self.orders_caching()
         return context
-    
+
+
 class UserCartView(TemplateView):
     template_name = "users/users_cart.html"
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = "Список товаров"
         return context
+
 
 @login_required
 def logout(request):
@@ -209,7 +221,6 @@ def logout(request):
 #         "form": form,
 #     }
 #     return render(request, "users/registration.html", context)
-
 
 
 # @login_required
