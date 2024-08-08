@@ -38,8 +38,7 @@
                                 <b>Информация</b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item  text-white" href="#">Доставка и оплата</a></li>
-                                <li><a class="dropdown-item  text-white" href="#">Контактная информация</a></li>
+                                <li><a class="dropdown-item  text-white" href="{% url "main:delivery" %}">Условия доставки</a></li>
                                 <li><a class="dropdown-item  text-white" href="{% url "main:about" %}">Про нас</a></li>
                             </ul>
                         </li>
@@ -78,6 +77,8 @@
                         <input class="form-control me-2" style="border-radius: 50px;" type="search" name="q" placeholder="Введите запрос..." aria-label="Search" >
                         <button class="btn btn-outline-success text-white" style="border-radius: 50px;" type="submit">Поиск</button>
                     </form>
+                    <div id="error-message" style="display: none;">
+                    </div>
                 </div>
             </div>
         </nav>
@@ -128,6 +129,7 @@
     <script src={% static "deps/js/jquery/jquery-3.7.0.min.js" %}></script>
     <script src={% static "deps/js/jquery-ajax.js" %}></script>
     <script src={% static "deps/js/bootstrap/bootstrap.bundle.min.js" %}></script>
+    <script src={% static "deps/js/jquery-search.js" %}></script>
 </body>
 
 </html> 

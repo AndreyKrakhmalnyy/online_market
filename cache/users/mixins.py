@@ -1,7 +1,7 @@
 from django.core.cache import cache
 
 
-class CacheMixin:
+class UserOrdersCacheMixin:
     def set_cache(self, query, cache_name, cache_time):
         data = cache.get(cache_name)
 

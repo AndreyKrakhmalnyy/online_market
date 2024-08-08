@@ -1,5 +1,6 @@
 // Когда html документ готов (прорисован)
 $(document).ready(function () {
+    
     // берем в переменную элемент разметки с id jq-notification для оповещений от ajax
     var successMessage = $("#jq-notification");
 
@@ -231,5 +232,15 @@ $("input[name='requires_delivery']").change(function () {
             var cleanedPhoneNumber = phoneNumber.replace(/[()\-\s]/g, '');
             $('#id_phone_number').val(cleanedPhoneNumber);
         }
+    });
+    
+    const searchForm = document.querySelector('.d-flex[role="search"]');
+    searchForm.addEventListener('submit', (event) => {
+      const searchQuery = document.querySelector('input[name="q"]').value;
+    
+      if (searchQuery.trim() === '') {
+        event.preventDefault();
+        errorMessage.textContent = "Введите запрос"; 
+      }
     });
 });

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 
-# Django configs
+# Django settings
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-!p(@0*mmniqz2a9x24mwrq1+ow&ei)!g+8_-ysyzz(1*+az#y_"
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -87,23 +88,44 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "app.wsgi.application"
 
+
+# debug_toolbar settings
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG
+}
+
 INTERNAL_IPS = [
     "127.0.0.1",
+    '::1',
 ]
 
-# Databases configs
+
+# databases settings
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+POSTGRES_HOST_LOCAL = os.getenv('POSTGRES_HOST_LOCAL')
+
 DATABASES = {
+    
+    # для локального запуска
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "NAME": os.getenv('POSTGRES_DB'),
+    #     "USER": os.getenv('POSTGRES_USER'),
+    #     "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
+    #     "HOST": os.getenv('POSTGRES_HOST_LOCAL'),
+    #     "PORT": os.getenv('POSTGRES_PORT'), 
+    # },
+    
+    # для запуска в docker контейнере
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "online_magazine_db",
-        "USER": "role_of_magazine",
-        "PASSWORD": "online-magazine",
-        "HOST": "localhost",  
-        "PORT": "5432", 
-        # Admin (login: root, password: root)
-    }
+        "NAME": os.getenv('POSTGRES_DB'),
+        "USER": os.getenv('POSTGRES_USER'),
+        "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
+        "HOST": os.getenv('POSTGRES_HOST'),
+        "PORT": os.getenv('POSTGRES_PORT'), 
+    },
 }
 
 # Default primary key field type
@@ -152,7 +174,7 @@ MEDIA_URL = "media/"
 
 MEDIA_ROOT = BASE_DIR / "media"
 
-# Auth configs
+# Auth settings
 
 AUTH_USER_MODEL = "users.User"
 
@@ -168,8 +190,8 @@ SIMPLE_JWT = {
     "UPDATE_LAST_LOGIN": False,
 
     "ALGORITHM": "HS256",
-    "SIGNING_KEY": "sdafQW@aWF0IjoxNTE2MjM5MDIyfQSflKx",
-    "VERIFYING_KEY": "wRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c@",
+    "SIGNING_KEY": os.getenv("SIMPLE_JWT_SIGNING_KEY"),
+    "VERIFYING_KEY": os.getenv("SIMPLE_JWT_VERIFYING_KEY"),
     "AUDIENCE": None,
     "ISSUER": None,
     "JSON_ENCODER": None,
@@ -200,10 +222,10 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
-# API configs
+# API settings
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'KitchenLand API',
+    'TITLE': 'Kitchenland API',
     'DESCRIPTION': 'API для получения данных о товарах, заказах и пользователях магазина. Доступ к данным доступен через jwt-токен.',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
@@ -216,18 +238,30 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
-# Cache configs
+# Cache settings
+
+REDIS_HOST = os.getenv('REDIS_HOST') 
+REDIS_PORT = os.getenv('REDIS_PORT')
+REDIS_DB = os.getenv('REDIS_DB')
+REDIS_HOST_LOCAL = os.getenv('REDIS_HOST_LOCAL') 
 
 CACHES = {
+    
+    # для запуска в docker контейнере
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}', 
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        }
-    }
+        },
+    },
+    
+    # для локального запуска
+    # 'default': {
+    #     'BACKEND': 'django_redis.cache.RedisCache',
+    #     'LOCATION': f'redis://{REDIS_HOST_LOCAL}:{REDIS_PORT}/', 
+    #     'OPTIONS': {
+    #         'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+    #     },
+    # },
 }
-
-INTERNAL_IPS = [
-    '127.0.0.1',
-]

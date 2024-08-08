@@ -13,7 +13,7 @@ urlpatterns = [
     path("orders/", include("orders.urls", namespace="orders")),
     
     path("Jwt-token/", include("utils.auth.jwt-auth.urls")),
-    path("swagger/", include("utils.api.swagger.urls")),
+    path("swagger-api/", include("utils.api.swagger.urls")),
     path("goods-api/", include("goods.api.urls")),
     path("users-api/", include("users.api.urls")),
     path("orders-api/", include("orders.api.urls")),
@@ -28,4 +28,4 @@ if settings.DEBUG:
 
 
 "http://127.0.0.1:8000/admin"
-"http://127.0.0.1:8000/swagger/endpoints/"
+"http://127.0.0.1:8000/swagger-api/endpoints/"

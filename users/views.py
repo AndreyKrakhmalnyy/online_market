@@ -11,7 +11,7 @@ from orders.models import Order, OrderItem
 from users.forms import UserLoginForm, UserRegistrationForm, ProfileForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from cache.goods.mixins import CacheMixin
+from cache.users.mixins import UserOrdersCacheMixin
 from django.core.cache import cache
 
 
@@ -49,8 +49,9 @@ class UserLoginView(LoginView):
 
 
 class UserRegistrationView(CreateView):
-    template_name = "users/registration.html"
+    template_name = 'users/registration.html'
     form_class = UserRegistrationForm
+    success_url = reverse_lazy('users:profile')
 
     def form_valid(self, form):
         session_key = self.request.session.session_key
@@ -60,16 +61,19 @@ class UserRegistrationView(CreateView):
             form.save()
             auth.login(self.request, user)
 
-            if session_key:
-                Cart.objects.filter(session_key=session_key).update(user=user)
-            messages.success(self.request, f"{user.username}, Вы вошли в аккаунт")
-            return HttpResponseRedirect(self.success_url)
+        if session_key:
+            Cart.objects.filter(session_key=session_key).update(user=user)
 
-    def get_success_url(self):
-        return reverse_lazy("user:profile")
+        messages.success(self.request, f"{user.username}, Вы успешно зарегистрированы и вошли в аккаунт!")
+        return HttpResponseRedirect(self.success_url)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Home - Регистрация'
+        return context
 
 
-class UserProfileView(LoginRequiredMixin, CacheMixin, UpdateView):
+class UserProfileView(LoginRequiredMixin, UserOrdersCacheMixin, UpdateView):
     template_name = "users/profile.html"
     form_class = ProfileForm
 

@@ -1,0 +1,45 @@
+version: '3.9' 
+
+services:
+
+  online-market-app:
+    image: online-market-image:latest 
+    container_name: online-market-app
+    depends_on: 
+      - online-market-db
+      - online-market-redis
+    ports:
+      - "8000:8000"
+    command:  
+      bash -c "./manage.py makemigrations && ./manage.py migrate && \
+        ./manage.py loaddata fixtures/goods/categories.json && \
+        ./manage.py loaddata fixtures/goods/products.json && \
+        ./manage.py runserver 0.0.0.0:8000" 
+    env_file:
+      - .env
+      
+  online-market-db: 
+    image: postgres:latest 
+    container_name: online-market-db
+    ports:
+      - "5433:${POSTGRES_PORT}"
+    volumes: 
+      - ~/.pg/pg_data/online-market-db:/data-container/postgresql/online-market-db
+    environment:
+        POSTGRES_DB: ${POSTGRES_DB}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    env_file: 
+      - .env
+
+  online-market-redis:
+    image: redis:5.0.1  
+    restart: always
+    container_name: online-market-redis
+    ports:
+      - "6380:${REDIS_PORT}"  
+    volumes:
+      - ~/etc/redis/redis.conf:/etc/redis/redis.conf 
+    command: redis-server /etc/redis/redis.conf 
+    env_file: 
+      - .env
