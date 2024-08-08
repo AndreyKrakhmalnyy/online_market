@@ -10,4 +10,4 @@ __pycache__/
 media/
 
 #variables
-.env
+# .env
