@@ -115,24 +115,24 @@ POSTGRES_HOST_LOCAL = os.getenv('POSTGRES_HOST_LOCAL')
 DATABASES = {
     
     # для запуска в docker контейнере
-    "default": {
-        "ENGINE": "django.db.backends.postgresql", 
-        "NAME": os.getenv('POSTGRES_DB'),
-        "USER": os.getenv('POSTGRES_USER'),
-        "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
-        "HOST": os.getenv('POSTGRES_HOST'),
-        "PORT": os.getenv('POSTGRES_PORT'), 
-    },
-
-    # для локального запуска
     # "default": {
-    #     "ENGINE": "django.db.backends.postgresql",
+    #     "ENGINE": "django.db.backends.postgresql", 
     #     "NAME": os.getenv('POSTGRES_DB'),
     #     "USER": os.getenv('POSTGRES_USER'),
     #     "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
-    #     "HOST": os.getenv('POSTGRES_HOST_LOCAL'),
+    #     "HOST": os.getenv('POSTGRES_HOST'),
     #     "PORT": os.getenv('POSTGRES_PORT'), 
     # },
+
+    # для локального запуска
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv('POSTGRES_DB'),
+        "USER": os.getenv('POSTGRES_USER'),
+        "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
+        "HOST": os.getenv('POSTGRES_HOST_LOCAL'),
+        "PORT": os.getenv('POSTGRES_PORT'), 
+    },
     
 }
 
@@ -256,22 +256,22 @@ REDIS_HOST_LOCAL = os.getenv('REDIS_HOST_LOCAL')
 CACHES = {
     
     # для запуска в docker контейнере
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache', 
-        'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}', 
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        },
-    },
-    
-    # для локального запуска
     # 'default': {
-    #     'BACKEND': 'django_redis.cache.RedisCache',
-    #     'LOCATION': f'redis://{REDIS_HOST_LOCAL}:{REDIS_PORT}/', 
+    #     'BACKEND': 'django_redis.cache.RedisCache', 
+    #     'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}', 
     #     'OPTIONS': {
     #         'CLIENT_CLASS': 'django_redis.client.DefaultClient',
     #     },
     # },
+    
+    # для локального запуска
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': f'redis://{REDIS_HOST_LOCAL}:{REDIS_PORT}/', 
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+    },
     
 }
 

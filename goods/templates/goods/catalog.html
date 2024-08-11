@@ -60,10 +60,10 @@
     </div>
 
     {% if request.GET.q %} <!--Если поступает запрос get.q-->
-    <h3 class="mt-4">Результаты поиска по запросу "{{ request.GET.q }}":</h3> <!--То показать надпись-->
+    <h3 class="mt-4 text-white index-text-content" style="text-shadow: 1px 2px #000;"><i>Результаты поиска по запросу </i>"{{ request.GET.q }}":</h3> <!--То показать надпись-->
         {% if not goods %} <!--Если ничего не найдено-->
             <link rel="stylesheet" href={% static "deps/css/my_footer_css.css" %}>
-            <h3 class="mt-4">По запросу ничего не найдено.</h3> <!--То показать надпись-->
+            <h3 class="mt-4 text-white index-text-content" style="text-shadow: 1px 2px #000;"><i>По вашему запросу ничего не найдено.</i></h3> <!--То показать надпись-->
         {% endif %}
     {% endif %}
 

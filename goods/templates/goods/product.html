@@ -5,6 +5,11 @@
 {% include "includes/cart_button.html" %}
 {% endblock %}
 
+{% block css %}
+    <link rel="stylesheet" href={% static "deps/css/my_footer_css.css" %}>
+    <link rel="stylesheet" href={% static "deps/css/main_content.css" %}>
+{% endblock  %}
+
 {% block content %}
     <div class="container mt-5">
         <div class="card mb-4 custom-shadow" style="width: 85%">
