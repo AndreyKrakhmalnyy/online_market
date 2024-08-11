@@ -2,12 +2,9 @@
 .pylintrc
 __pycache__/
 
-
 #ide
 .vscode/
 
 #django 
 media/
 
-#variables
-# .env

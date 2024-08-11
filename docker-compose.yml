@@ -9,15 +9,15 @@ services:
       - online-market-db
       - online-market-redis
     ports:
-      - "8000:8000"
+      - "7000:7000"
     command:  
       bash -c "./manage.py makemigrations && ./manage.py migrate && \
         ./manage.py loaddata fixtures/goods/categories.json && \
         ./manage.py loaddata fixtures/goods/products.json && \
-        ./manage.py runserver 0.0.0.0:8000" 
+        ./manage.py runserver 0.0.0.0:7000" 
     env_file:
       - .env
-      
+
   online-market-db: 
     image: postgres:latest 
     container_name: online-market-db
@@ -43,3 +43,28 @@ services:
     command: redis-server /etc/redis/redis.conf 
     env_file: 
       - .env
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - 9090:9090
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+
+  grafana:
+    image: grafana/grafana:latest
+    ports: 
+      - 3000:3000
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - online-market-app
+
+volumes:
+  grafana_data:
+  prometheus_data:
+  

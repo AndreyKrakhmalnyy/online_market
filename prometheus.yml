@@ -1,0 +1,14 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "django-metrics"
+    metrics_path: monitoring/metrics
+    static_configs:
+      - targets: 
+        - online-market-app:7000
+    relabel_configs:
+      - source_labels: [__adress__]
+        regex: "([^:]+):\\d+"
+        target_label: instance

@@ -7,16 +7,17 @@ from app import settings
 urlpatterns = [
     path("", include("main.urls", namespace="main")),
     path("admin/", admin.site.urls),
-    path("catalog/", include("goods.urls", namespace="catalog")),
+    path("catalog/", include("goods.urls", namespace="catalog")), 
     path("user/", include("users.urls", namespace="user")),
     path("cart/", include("carts.urls", namespace="cart")),
     path("orders/", include("orders.urls", namespace="orders")),
     
-    path("Jwt-token/", include("utils.auth.jwt-auth.urls")),
-    path("swagger-api/", include("utils.api.swagger.urls")),
+    path('monitoring/', include('django_prometheus.urls')),
     path("goods-api/", include("goods.api.urls")),
     path("users-api/", include("users.api.urls")),
     path("orders-api/", include("orders.api.urls")),
+    path("Jwt-token/", include("utils.auth.jwt-auth.urls")),
+    path("swagger-api/", include("utils.api.swagger.urls")),
 ]
 
 if settings.DEBUG:
@@ -29,3 +30,4 @@ if settings.DEBUG:
 
 "http://127.0.0.1:8000/admin"
 "http://127.0.0.1:8000/swagger-api/endpoints/"
+"http://127.0.0.1:8000/monitoring/metrics"

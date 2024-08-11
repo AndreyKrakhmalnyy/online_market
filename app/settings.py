@@ -10,9 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 from datetime import timedelta
-import os
+from dotenv import load_dotenv, find_dotenv
+   
+load_dotenv(find_dotenv())
+      
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.postgres",
     
     "rest_framework_simplejwt",
+    'django_prometheus',
     "drf_spectacular",
     "rest_framework",
     "debug_toolbar",
@@ -57,6 +62,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -66,6 +72,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = "app.urls"
@@ -107,6 +114,16 @@ POSTGRES_HOST_LOCAL = os.getenv('POSTGRES_HOST_LOCAL')
 
 DATABASES = {
     
+    # для запуска в docker контейнере
+    "default": {
+        "ENGINE": "django.db.backends.postgresql", 
+        "NAME": os.getenv('POSTGRES_DB'),
+        "USER": os.getenv('POSTGRES_USER'),
+        "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
+        "HOST": os.getenv('POSTGRES_HOST'),
+        "PORT": os.getenv('POSTGRES_PORT'), 
+    },
+
     # для локального запуска
     # "default": {
     #     "ENGINE": "django.db.backends.postgresql",
@@ -117,15 +134,6 @@ DATABASES = {
     #     "PORT": os.getenv('POSTGRES_PORT'), 
     # },
     
-    # для запуска в docker контейнере
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv('POSTGRES_DB'),
-        "USER": os.getenv('POSTGRES_USER'),
-        "PASSWORD": os.getenv('POSTGRES_PASSWORD'),
-        "HOST": os.getenv('POSTGRES_HOST'),
-        "PORT": os.getenv('POSTGRES_PORT'), 
-    },
 }
 
 # Default primary key field type
@@ -249,7 +257,7 @@ CACHES = {
     
     # для запуска в docker контейнере
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
+        'BACKEND': 'django_redis.cache.RedisCache', 
         'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}', 
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
@@ -264,4 +272,11 @@ CACHES = {
     #         'CLIENT_CLASS': 'django_redis.client.DefaultClient',
     #     },
     # },
+    
 }
+
+# Monitoring settings
+
+DATABASES["default"]["ENGINE"] = "django_prometheus.db.backends.postgresql"
+CACHES["default"]["BACKEND"] = "django_prometheus.cache.backends.redis.RedisCache"
+PROMETHEUS_EXPORT_MIGRATIONS = True
