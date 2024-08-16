@@ -4,7 +4,7 @@ global:
 
 scrape_configs:
   - job_name: "django-metrics"
-    metrics_path: monitoring/metrics
+    metrics_path: prometheus/metrics
     static_configs:
       - targets: 
         - online-market-app:7000

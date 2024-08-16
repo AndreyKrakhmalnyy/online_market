@@ -12,6 +12,8 @@ from orders.models import Order, OrderItem
 
 
 class CreateOrderView(LoginRequiredMixin, FormView):
+    """Отвечает за оформление заказа пользователем."""
+    
     template_name = "orders/create_order.html"
     form_class = CreateOrderForm
     success_url = reverse_lazy("user:profile")
@@ -23,6 +25,9 @@ class CreateOrderView(LoginRequiredMixin, FormView):
         return initial
     
     def form_valid(self, form):
+        """Реализует процедуру проверки входящих данных формы на валидность, отображением ошибок если они есть
+            и отправки данных в БД в случае верных данных."""
+            
         if form.is_valid():
             if form.cleaned_data['requires_delivery'] == "1" and not form.cleaned_data['delivery_address']:
                 messages.warning(self.request, 'Введите адрес доставки')
@@ -76,6 +81,8 @@ class CreateOrderView(LoginRequiredMixin, FormView):
                     return redirect('orders:create_order')
         
     def form_invalid(self):
+        """Вывод сообщения об ошибке на странице, если пропущены обязательные для заполнения поля."""
+        
         messages.warning(self.request, 'Заполните все указанные поля')
         return redirect('orders:create_order')
     

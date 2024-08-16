@@ -13,7 +13,6 @@ class UserLoginForm(AuthenticationForm):
 
 
 class UserRegistrationForm(UserCreationForm):
-
     class Meta:
         model = User
         fields = (

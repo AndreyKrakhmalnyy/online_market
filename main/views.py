@@ -17,6 +17,7 @@ class AboutView(TemplateView):
     template_name = 'main/about.html'
     
     def get_context_data(self, **kwargs):
+        """Читает файл 'main/descriptions/about.md', преобразует его в HTML-код с помощью markdown."""
         
         with open('main/descriptions/about.md', 'r', encoding='utf-8') as f:
             description = f.read()
@@ -32,6 +33,7 @@ class DeliveryView(TemplateView):
     template_name = 'main/delivery.html'
     
     def get_context_data(self, **kwargs):
+        """Читает файл 'main/descriptions/delivery.md', преобразует его в HTML-код с помощью markdown."""
         
         with open('main/descriptions/delivery.md', 'r', encoding='utf-8') as f:
             description = f.read()

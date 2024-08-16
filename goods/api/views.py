@@ -20,6 +20,30 @@ class CategoriesViewSet(viewsets.ModelViewSet):
             permission_classes = (IsAdminUser,)
         return [permission() for permission in permission_classes]
 
+    @extend_schema(summary="Получение списка всех категорий товаров магазина.") 
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+    
+    @extend_schema(summary="Получение категории по id.")   
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    @extend_schema(summary="Добавление категории.")
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @extend_schema(summary="Полное обновление данных о категории товаров (требует заполнения всех полей).")
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @extend_schema(summary="Частичное обновление данных о категории (позволяет заменить конкретное поле).")
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+    @extend_schema(summary="Удаление категории товаров по id.")
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
 @extend_schema(tags=['Products'])
 class ProductsViewSet(viewsets.ModelViewSet):
     queryset = Products.objects.all()
@@ -34,3 +58,27 @@ class ProductsViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = (IsAdminUser,)
         return [permission() for permission in permission_classes]
+    
+    @extend_schema(summary="Получение списка всех товаров магазина.") 
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+    
+    @extend_schema(summary="Получение товара по id.")   
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    @extend_schema(summary="Добавление товара.")
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @extend_schema(summary="Полное обновление данных о товаре (требует заполнения всех полей).")
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    @extend_schema(summary="Частичное обновление данных о товаре (позволяет заменить конкретное поле).")
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+    @extend_schema(summary="Удаление товара по id.")
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)

@@ -70,7 +70,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
@@ -114,7 +113,7 @@ POSTGRES_HOST_LOCAL = os.getenv('POSTGRES_HOST_LOCAL')
 
 DATABASES = {
     
-    # для запуска в docker контейнере
+    # для запуска в docker-контейнере
     # "default": {
     #     "ENGINE": "django.db.backends.postgresql", 
     #     "NAME": os.getenv('POSTGRES_DB'),
@@ -234,7 +233,9 @@ SIMPLE_JWT = {
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Kitchenland API',
-    'DESCRIPTION': 'API для получения данных о товарах, заказах и пользователях магазина. Доступ к данным доступен через jwt-токен.',
+    'DESCRIPTION': "API для получения данных о товарах, заказах и пользователях магазина.\
+        Доступ к данным доступен через jwt-токен. Описания полей к эндпоинтам приведены ниже в 'Schemas', \
+        обязательные к заполнению поля помечены как '*'.",
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }
@@ -277,6 +278,5 @@ CACHES = {
 
 # Monitoring settings
 
-DATABASES["default"]["ENGINE"] = "django_prometheus.db.backends.postgresql"
-CACHES["default"]["BACKEND"] = "django_prometheus.cache.backends.redis.RedisCache"
-PROMETHEUS_EXPORT_MIGRATIONS = True
+PROMETHEUS_APPS = "django_prometheus.apps"
+# PROMETHEUS_EXPORT_MIGRATIONS = True

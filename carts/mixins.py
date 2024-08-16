@@ -6,6 +6,8 @@ from carts.utils import get_user_carts
 
 class CartMixin:
     def get_cart(self, request, product=None, cart_id=None):
+        """Возвращает объект Cart  для текущего пользователя, проверяя его (анонимный или авторизованный)."""
+        
         if request.user.is_authenticated:
             query_kwargs = {"user": request.user}
         else:
@@ -20,6 +22,7 @@ class CartMixin:
         return Cart.objects.filter(**query_kwargs).first()
     
     def render_cart(self, request):
+        """Рендерит шаблон для отображения корзины пользователя."""
         user_cart = get_user_carts(request)
         context = {"carts": user_cart}
         referer = request.META.get("HTTP_REFERER")

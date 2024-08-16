@@ -11,9 +11,6 @@ from goods.models import Products
 def q_search(query: str) -> QuerySet[Products]:
     """Метод для поиска товара по его id.
 
-    Args:
-        query: str - cтрока, содержащая id товара.
-
     Returns:
         QuerySet - набор объектов Products, соответствующих заданному id,
             либо пустой QuerySet, если id не найден, иначе искать по полям name и description с учётом регистра, окончаний и т.д.

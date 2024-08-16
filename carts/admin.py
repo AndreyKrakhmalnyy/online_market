@@ -6,6 +6,7 @@ class CartsAdmin(admin.ModelAdmin):
     """Отвечает за регистрацию модели в админке и отображает дополнительными полями по фильтрации.
         Также позволяет менять данные в корзине пользователей (inlines).
     """
+    
     list_display = ["user_display", "product", "quantity", "created_timestamp"]
     list_filter = ["product", "created_timestamp"]
     

@@ -2,7 +2,7 @@ from carts.models import Cart
 
 
 def get_user_carts(request):
-    """Отвечает за отображение содержимого корзины для авторизованного и анонимного пользователей."""
+    """Отображает содержимое корзины авторизованного и анонимного пользователей."""
     
     if request.user.is_authenticated:
         return Cart.objects.filter(user=request.user).select_related("product")

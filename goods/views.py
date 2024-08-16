@@ -1,5 +1,4 @@
 from django.db.models.base import Model as Model
-from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView
 from goods.models import Products
 from goods.utils import q_search
@@ -8,12 +7,16 @@ from django.http import Http404
 
 
 class ProductView(DetailView):
+    """Отвечает за отображение карточки каждого товара."""
+    
     template_name = "goods/product.html"
     context_object_name = "product"
     slug_url_kwarg = "product_slug"
     allow_empty = False
     
     def get_object(self, queryset=None):
+        """Получает товар по его slug."""
+        
         product = Products.objects.get(slug=self.kwargs.get(self.slug_url_kwarg))
         return product
     
@@ -24,12 +27,19 @@ class ProductView(DetailView):
 
 
 class CatalogView(ListView):
+    """Отвечает за отображение каталога всех товаров с пагинацией.
+    """
+    
     queryset = Products.objects.all().order_by("-id")
     context_object_name = "goods"
     template_name = "goods/catalog.html"
     paginate_by = 3
     
     def get_queryset(self):
+        """Возвращает набор всех товаров для текущего запроса c фильтрацией и сортировкой 
+            по ценам с учётом и без учёта акционных товаров.
+        """
+        
         category_slug = self.kwargs.get("category_slug")
         on_sale = self.request.GET.get("on_sale")
         order_by = self.request.GET.get("order_by")
