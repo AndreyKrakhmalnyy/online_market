@@ -19,27 +19,27 @@
 #### Установка проекта
 
 ##### Клонируем репозиторий:
-> git clone https://github.com/AndreyKrakhmalnyy/online_market.git
+`git clone https://github.com/AndreyKrakhmalnyy/online_market.git`
 
 ##### Создаём виртуальное окружение и активируем его:
-> cd online_market/ && python3 -m venv venv && cd venv/ && source bin/activate && cd ..
+`cd online_market/ && python3 -m venv venv && cd venv/ && source bin/activate && cd ..`
 
 ##### Устанавливаем зависимости:
-> pip install -r requirements.txt
+`pip install -r requirements.txt`
 
 ------------
 #### Локальный запуск:
-> python3 manage.py runserver 8000
-
+`python3 manage.py runserver 8000`
 ##### Ссылки расположены в 'app/urls.py'.
 ------------
 #### Запуск с помощью docker:
 1. Меняем местами настройки переменных 'DATABASES' и 'CACHES'  в app/settings.py с  'для локального запуска' на 'для запуска в docker контейнере';
 2. Создаём образы и поднимаем контейнеры командой ниже
-> docker build -t online-market-image . && docker compose up --build
+`docker build -t online-market-image . && docker compose up --build`
+
 
 ##### Ссылки:
-> http://0.0.0.0:7000/swagger-api/endpoints/ - документация к API
-> http://0.0.0.0:7000/prometheus/metrics - метрики prometheus
-> http://0.0.0.0:9090/ - prometheus-ui
-> http://0.0.0.0:3000/ - grafana-ui
+- http://0.0.0.0:7000/swagger-api/endpoints/ - документация к API
+- http://0.0.0.0:7000/prometheus/metrics - метрики prometheus
+- http://0.0.0.0:9090/ - prometheus-ui
+- http://0.0.0.0:3000/ - grafana-ui
