@@ -18,5 +18,3 @@ COPY --chown=andrey:andrey . .
 USER andrey
 
 CMD ["python3", "manage.py", "runserver", "0.0.0.0:7000"]
-
-# docker build -t online-market-image . && docker compose up --build

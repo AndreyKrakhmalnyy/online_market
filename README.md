@@ -28,7 +28,7 @@
 `pip install -r requirements.txt`
 
 ------------
-#### Локальный запуск:
+#### Локальный запуск (ubuntu):
 `python3 manage.py runserver 8000`
 ##### Ссылки расположены в 'app/urls.py'.
 ------------
@@ -38,7 +38,7 @@
 `docker build -t online-market-image . && docker compose up --build`
 
 
-##### Ссылки:
+#### Ссылки:
 - http://0.0.0.0:7000/swagger-api/endpoints/ - документация к API
 - http://0.0.0.0:7000/prometheus/metrics - метрики prometheus
 - http://0.0.0.0:9090/ - prometheus-ui
