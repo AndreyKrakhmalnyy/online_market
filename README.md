@@ -10,13 +10,13 @@
 
 #### Дополнительно интегрированы такие инструменты как:
 - js (отображение анимации добавления и удаления товаров из корзины);
-- аутентификация по jwt-токену для получения данных в api;
-- redis (кэширования представлений);
-- open-api/swagger;
-- prometheus и grafana;
-- docker.
-------------
-#### Установка проекта
+- jwt-auth (авторизация по токену);
+- redis (кэширование эндпоинтов);
+- open-api/swagger (документация);
+- prometheus и grafana (мониторинг);
+- docker (контейнеризация)
+
+#### Установка проекта (linux)
 
 ##### Клонируем репозиторий:
 `git clone https://github.com/AndreyKrakhmalnyy/online_market.git`
@@ -27,19 +27,17 @@
 ##### Устанавливаем зависимости:
 `pip install -r requirements.txt`
 
-------------
-#### Локальный запуск (ubuntu):
+#### Локальный запуск:
 `python3 manage.py runserver 8000`
-##### Ссылки расположены в 'app/urls.py'.
-------------
+
 #### Запуск с помощью docker:
 1. Меняем местами настройки переменных 'DATABASES' и 'CACHES'  в app/settings.py с  'для локального запуска' на 'для запуска в docker контейнере';
 2. Создаём образы и поднимаем контейнеры командой ниже <br>
-`docker build -t online-market-image . && docker compose up --build`
+`docker build -t -d online-market-image . && docker compose up --build`
 
 
 #### Ссылки:
-- http://0.0.0.0:7000/swagger-api/endpoints/ - документация к API
-- http://0.0.0.0:7000/prometheus/metrics - метрики prometheus
+- http://0.0.0.0:7000/swagger-api/endpoints/
+- http://0.0.0.0:7000/prometheus/metrics
 - http://0.0.0.0:9090/ - prometheus-ui
 - http://0.0.0.0:3000/ - grafana-ui
